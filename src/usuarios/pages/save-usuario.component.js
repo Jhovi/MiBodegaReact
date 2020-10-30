@@ -27,13 +27,15 @@ export default class SaveUsuario extends Component {
             )
         }
 
-        console.log(data)
     }
 
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
                 <h3>Registrar Usuario</h3>
+
+
+
 
                 <div className="form-group">
                     <label>Nombre</label>
