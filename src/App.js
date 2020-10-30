@@ -1,25 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Axios from 'axios';
+import { Component } from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
+import Home from './components/home.component';
+import Login from './components/login.component';
+import Navigation from './components/nav.component';
+import SaveUsuario from './usuarios/pages/save-usuario.component';
+
+export default class App extends Component {
+
+  
+  state = {};
+ 
+  componentDidMount = () => {
+
+    Axios.get('Usuario/' + localStorage.getItem('id')).then(
+        res => {
+          this.setUser(res.data)
+        },
+        err => {
+            console.log(err);
+        }
+    )
 }
 
-export default App;
+  setUser = user => {
+    this.setState({
+      user: user
+  })
+  }
+
+  render() {
+
+    return (
+      <BrowserRouter>
+        <div className="App">
+          <Navigation user={this.state.user} setUser={this.setUser} />
+          <div className="auth-wrapper">
+            <div className="auth-inner">
+              <Switch>
+                <Route exact path="/" component={() => <Home user={this.state.user} /> } />
+                <Route exact path="/login" component={() => <Login setUser={this.setUser} />} />
+                <Route exact path="/register" component={SaveUsuario} />
+              </Switch>
+            </div>
+          </div>
+        </div>
+      </BrowserRouter >
+    );
+
+  }
+}
