@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { Redirect } from "react-router-dom";
 
 export default class Home extends Component {
 
@@ -9,14 +10,12 @@ export default class Home extends Component {
             return (
                 <h2>Hi {this.props.user.id}</h2>
             )
+        } else {
+            return (
+                <Redirect to={'/login'} />
+            )
         }
 
-        return (
-            <div>
-                <h1>Error</h1>
 
-                <h2>You have to log in first!!</h2>
-            </div>
-        )
     }
 }

@@ -36,7 +36,6 @@ export default class SaveUsuario extends Component {
 
 
 
-
                 <div className="form-group">
                     <label>Nombre</label>
                     <input type="text" className="form-control" placeholder="Nombre"

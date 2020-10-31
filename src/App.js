@@ -7,29 +7,30 @@ import './App.css';
 import Home from './components/home.component';
 import Login from './components/login.component';
 import Navigation from './components/nav.component';
+import AdmUsuarios from './usuarios/pages/adm-usuarios.component';
 import SaveUsuario from './usuarios/pages/save-usuario.component';
 
 export default class App extends Component {
 
-  
+
   state = {};
- 
+
   componentDidMount = () => {
 
     Axios.get('Usuario/' + localStorage.getItem('id')).then(
-        res => {
-          this.setUser(res.data)
-        },
-        err => {
-            console.log(err);
-        }
+      res => {
+        this.setUser(res.data)
+      },
+      err => {
+        console.log(err);
+      }
     )
-}
+  }
 
   setUser = user => {
     this.setState({
       user: user
-  })
+    })
   }
 
   render() {
@@ -41,9 +42,10 @@ export default class App extends Component {
           <div className="auth-wrapper">
             <div className="auth-inner">
               <Switch>
-                <Route exact path="/" component={() => <Home user={this.state.user} /> } />
+                <Route exact path="/" component={() => <Home user={this.state.user} />} />
                 <Route exact path="/login" component={() => <Login setUser={this.setUser} />} />
                 <Route exact path="/register" component={SaveUsuario} />
+                <Route exact path="/adm-usuarios" component={AdmUsuarios} />
               </Switch>
             </div>
           </div>
