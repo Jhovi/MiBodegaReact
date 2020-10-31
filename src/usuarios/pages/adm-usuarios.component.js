@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom';
 
 export default class AdmUsuarios extends Component {
 
@@ -25,9 +26,21 @@ export default class AdmUsuarios extends Component {
         })
     }
 
+    saveUsuarioView = () => {
+        this.setState({
+            redirectToSaveUsuario: true
+        })
+    }
+
     render() {
+
+        if (this.state.redirectToSaveUsuario) {
+            return <Redirect to={'/register'}/>;
+        }
+
         return (
             <div>
+                <button type="button" onClick={this.saveUsuarioView} className="btn btn-primary btn-register-user">Registrar Usuario</button>
                 <table className="table">
                     <thead>
                         <tr>
@@ -50,8 +63,8 @@ export default class AdmUsuarios extends Component {
                                     <td>{user.telefono}</td>
                                     <td>{user.dni}</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary btn-sm ">Editar</button>
-                                        <button type="button" class="btn btn-danger btn-sm ml-2">Eliminar</button>
+                                        <button type="button" className="btn btn-primary btn-sm ">Editar</button>
+                                        <button type="button" className="btn btn-danger btn-sm ml-2">Eliminar</button>
                                     </td>
                                 </tr>
                             )
