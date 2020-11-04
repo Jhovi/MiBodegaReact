@@ -4,6 +4,27 @@ import React, { useState } from 'react';
 import Datepicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Redirect } from "react-router-dom";
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import '../../App.css';
+
+const finalSpaceCharacters = [
+    {
+        id: 'a',
+        value: 0,
+        thumb: '/images/avatar_femenino.png'
+    },
+    {
+        id: 'b',
+        value: 1,
+        thumb: '/images/avatar_hombre.jpg'
+    },
+    {
+        id: 'c',
+        value: 2,
+        thumb: '/images/avatar_desconocido.jpg'
+    }
+]
+
 
 export default class SaveUsuario extends Component {
 
@@ -98,9 +119,12 @@ export default class SaveUsuario extends Component {
                         onChange={e => this.correo = e.target.value} />
                 </div>
 
-                <label>Fecha de Nacimiento</label>
-                <Datepicker className="form-control" selected={this.state.fecha} onChange={this.onChange} dateFormat='dd/MM/yyyy'
-                    maxDate={new Date("2002", "01", "01")} showYearDropdown scrollableMonthYearDropdown />
+                <div className="form-group">
+                    <label>Fecha de Nacimiento</label>
+                    <br></br>
+                    <Datepicker className="form-control"  selected={this.state.fecha} onChange={this.onChange} dateFormat='dd/MM/yyyy'
+                        maxDate={new Date("2002", "01", "01")} showYearDropdown scrollableMonthYearDropdown />
+                </div>
 
                 <div className="form-group">
                     <label>Telefono</label>

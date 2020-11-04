@@ -1,6 +1,8 @@
 import Axios from 'axios';
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom';
+import Navbar from 'react-bootstrap/Navbar'
+import { NavDropdown } from 'react-bootstrap';
 
 export default class AdmUsuarios extends Component {
 
@@ -30,17 +32,50 @@ export default class AdmUsuarios extends Component {
         this.setState({
             redirectToSaveUsuario: true
         })
+
+    }
+
+    downloadPDF = () => {
+        Axios({
+            url: 'Usuario/getpdf', method: 'get',
+            responseType: 'blob'
+        }).then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'file.pdf');
+            document.body.appendChild(link);
+            link.click();
+        })
+    }
+
+    donwloadCsv = () => {
+        Axios({
+            url: 'Usuario/GetExcel', method: 'get',
+            responseType: 'blob'
+        }).then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'file.csv');
+            document.body.appendChild(link);
+            link.click();
+        })
     }
 
     render() {
 
         if (this.state.redirectToSaveUsuario) {
-            return <Redirect to={'/register'}/>;
+            return <Redirect to={'/register'} />;
         }
 
         return (
             <div>
-                <button type="button" onClick={this.saveUsuarioView} className="btn btn-primary btn-register-user">Registrar Usuario</button>
+                <button type="button" onClick={this.saveUsuarioView} className="btn btn-primary  btn-register-user">Registrar Usuario</button>
+                <NavDropdown title="Export" id="basic-nav-dropdown" className="btn btn-export-file">
+                    <NavDropdown.Item onClick={this.downloadPDF}>Export PDF</NavDropdown.Item>
+                    <NavDropdown.Item onClick={this.donwloadCsv}>Export Excel</NavDropdown.Item>
+                </NavDropdown>
                 <table className="table">
                     <thead>
                         <tr>
