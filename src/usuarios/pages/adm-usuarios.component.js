@@ -14,7 +14,6 @@ export default class AdmUsuarios extends Component {
         Axios.get('Usuario').then(
             res => {
                 this.setUsers(res.data)
-                console.log(this.state.users);
             },
             err => {
                 console.log(err);
@@ -63,10 +62,21 @@ export default class AdmUsuarios extends Component {
         })
     }
 
+    editUserView = (id) => {
+        this.setState({
+            goToEditUser: true,
+            id: id
+        })
+    }
+
     render() {
 
         if (this.state.redirectToSaveUsuario) {
-            return <Redirect to={'/register'} />;
+            return <Redirect to={'/register/0' } />;
+        }
+
+        if (this.state.goToEditUser) {
+            return <Redirect to={'/register/' + this.state.id}/>;
         }
 
         return (
@@ -98,7 +108,7 @@ export default class AdmUsuarios extends Component {
                                     <td>{user.telefono}</td>
                                     <td>{user.dni}</td>
                                     <td>
-                                        <button type="button" className="btn btn-primary btn-sm ">Editar</button>
+                                        <button type="button" onClick={() => this.editUserView(user.id)} className="btn btn-primary btn-sm ">Editar</button>
                                         <button type="button" className="btn btn-danger btn-sm ml-2">Eliminar</button>
                                     </td>
                                 </tr>

@@ -20,7 +20,6 @@ export default class SaveProducto extends Component {
                 descripcion: this.descripcion,
                 precio: this.precio,
                 categoria: this.categoria,
-                estado: this.estado,
                 stock: this.stock
                
             }
@@ -71,13 +70,7 @@ export default class SaveProducto extends Component {
                     <input type="text" className="form-control" placeholder="Categoria"
                         onChange={e => this.categoria = e.target.value} />
                 </div> 
-
-                <div className="form-group">
-                    <label>Estado</label>
-                    <input type="text" className="form-control" placeholder="Estado"
-                        onChange={e => this.estado = e.target.value} />
-                </div>      
-
+                
                 <div className="form-group">
                     <label>Stock</label>
                     <input type="text" className="form-control" placeholder="Stock"
