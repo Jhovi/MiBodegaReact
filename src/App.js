@@ -9,6 +9,8 @@ import Login from './components/login.component';
 import Navigation from './components/nav.component';
 import AdmUsuarios from './usuarios/pages/adm-usuarios.component';
 import SaveUsuario from './usuarios/pages/save-usuario.component';
+import AdmProductos from './productos/adm-productos.component';
+import SaveProducto from './productos/save-productos.component';
 
 export default class App extends Component {
 
@@ -46,6 +48,8 @@ export default class App extends Component {
                 <Route exact path="/login" component={() => <Login setUser={this.setUser} />} />
                 <Route exact path="/register" component={SaveUsuario} />
                 <Route exact path="/adm-usuarios" component={AdmUsuarios} />
+                <Route exact path="/adm-productos" component={AdmProductos} />
+                <Route exact path="/adm-productos/registrar" component={SaveProducto} />
               </Switch>
             </div>
           </div>
