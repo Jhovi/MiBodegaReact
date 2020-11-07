@@ -7,7 +7,7 @@ export default class Login extends Component {
     state = {}
 
     handleSubmit = e => {
-        e.preventDefault();
+       
         const data = {
             correo: this.correo,
             password: this.password

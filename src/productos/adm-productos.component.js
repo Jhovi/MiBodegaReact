@@ -3,9 +3,13 @@ import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar'
 import { NavDropdown } from 'react-bootstrap';
+import EditProducto from './../productos/edit-productos.component';
 
 export default class AdmProductos extends Component {
 
+    constructor(props) {
+        super(props);
+    }
 
     state = {};
 
@@ -13,6 +17,7 @@ export default class AdmProductos extends Component {
 
         Axios.get('Producto').then(
             res => {
+                this.setProducts(res.data)               
                 this.setProducts(res.data)
             },
             err => {
@@ -32,7 +37,15 @@ export default class AdmProductos extends Component {
             redirectToSaveProducto: true
         })
 
-    }    
+    }
+
+    editProductoView(product) {
+        console.log(product)
+        this.setState({
+            redirectToEditProducto: true,
+            selectedproduct: product
+        })
+    }       
 
     render() {
 
@@ -40,6 +53,12 @@ export default class AdmProductos extends Component {
             return <Redirect to={'/adm-productos/registrar'} />;
         }
 
+        if (this.state.redirectToEditProducto) {
+            return <Redirect to={{
+                pathname: "/adm-productos/editar",
+                state: {producto: this.state.selectedproduct}}} />;
+        }
+      
         return (
             <div>
                 <button type="button" onClick={this.saveProductoView} className="btn btn-primary  btn-register-product">Registrar Producto</button>                                
@@ -60,15 +79,18 @@ export default class AdmProductos extends Component {
 
                         {this.state.products && this.state.products.map((product, index) => {
                             return (
-                                <tr key={index}>
-                                    <td>{product.id}</td>
+                                
+                                <tr key={index}>                                   
+                                    <td>{product.id}</td>                               
                                     <td>{product.nombre}</td>
                                     <td>{product.descripcion}</td>
                                     <td>{product.precio}</td>
                                     <td>{product.categoria}</td>
                                     <td>{product.estado}</td>
-                                    <td>{product.stock}</td>
+                                    <td>{product.stock}</td>                                   
                                     <td>
+                                        <button type="button" onClick={()=>this.editProductoView(product)} className="btn btn-primary btn-sm " >Editar</button>
+                                        <button type="button" className="btn btn-danger btn-sm ml-2">Eliminar</button>
                                         <button type="button" className="btn btn-primary btn-sm ">Editar</button>
                                     </td>
                                 </tr>

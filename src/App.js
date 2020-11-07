@@ -11,6 +11,7 @@ import AdmUsuarios from './usuarios/pages/adm-usuarios.component';
 import SaveUsuario from './usuarios/pages/save-usuario.component';
 import AdmProductos from './productos/adm-productos.component';
 import SaveProducto from './productos/save-productos.component';
+import EditProducto from './productos/edit-productos.component';
 import AdmTableros from './tableros/pages/adm-tableros.component';
 
 export default class App extends Component {
@@ -51,6 +52,7 @@ export default class App extends Component {
                 <Route exact path="/adm-usuarios" component={AdmUsuarios} />
                 <Route exact path="/adm-productos" component={AdmProductos} />
                 <Route exact path="/adm-productos/registrar" component={SaveProducto} />
+                <Route exact path="/adm-productos/editar" component={(props) =><EditProducto {...props} />} />
                 <Route exact path="/adm-tableros" component={AdmTableros} />
               </Switch>
             </div>
