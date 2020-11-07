@@ -18,6 +18,7 @@ export default class AdmProductos extends Component {
         Axios.get('Producto').then(
             res => {
                 this.setProducts(res.data)               
+                this.setProducts(res.data)
             },
             err => {
                 console.log(err);
@@ -71,6 +72,7 @@ export default class AdmProductos extends Component {
                             <th scope="col">Categoría</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Stock</th>
+                            <th scope="col">Opciones</th>
                         </tr>
                     </thead>                   
                     <tbody>
@@ -89,6 +91,7 @@ export default class AdmProductos extends Component {
                                     <td>
                                         <button type="button" onClick={()=>this.editProductoView(product)} className="btn btn-primary btn-sm " >Editar</button>
                                         <button type="button" className="btn btn-danger btn-sm ml-2">Eliminar</button>
+                                        <button type="button" className="btn btn-primary btn-sm ">Editar</button>
                                     </td>
                                 </tr>
                             )

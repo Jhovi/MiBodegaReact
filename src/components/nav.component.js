@@ -27,7 +27,7 @@ export default class Navigation extends Component {
                             <Link to={'/adm-productos'} className="nav-link">Productos</Link>
                         </li>
                         <li className="nav-item">
-                            <Link to={'/adm-metrics'} className="nav-link">Estadisticas</Link>
+                            <Link to={'/adm-tableros'} className="nav-link">Estadisticas</Link>
                         </li>
 
                         <li className="nav-item-logout">
