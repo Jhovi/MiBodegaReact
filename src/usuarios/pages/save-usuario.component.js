@@ -1,11 +1,11 @@
 import Axios from "axios";
 import { Component } from "react";
-import React, { useState } from 'react';
+import React from 'react';
 import Datepicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Redirect } from "react-router-dom";
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import '../../App.css';
+import Notifications, { notify } from '../../components/Notification';
 
 const finalSpaceCharacters = [
     {
@@ -32,6 +32,13 @@ export default class SaveUsuario extends Component {
         fecha: ''
     }
 
+    defaultValue = new Date(this.props.location.state.user.fechaNacimiento);
+
+
+    constructor(props) {
+        super(props);
+    }
+
     onChange = fecha => {
         this.setState({ fecha: fecha });
     }
@@ -42,29 +49,89 @@ export default class SaveUsuario extends Component {
     handleSubmit = e => {
         e.preventDefault();
         let data = {}
-        if (this.password === this.confirmPassword) {
+
+        if (this.props.location.state.user.id) {
+            var userNoEdit = {
+                id: this.props.location.state.user.id,
+                nombre: this.props.location.state.user.nombre,
+                apellido: this.props.location.state.user.apellido,
+                fechaNacimiento: this.props.location.state.user.fechaNacimiento.toString(),
+                correo: this.props.location.state.user.correo,
+                telefono: this.props.location.state.user.telefono,
+                dni: this.props.location.state.user.dni,
+                genero: this.props.location.state.user.genero
+            }
+
             data = {
+                id: this.props.location.state.user.id,
                 nombre: this.nombre,
                 apellido: this.apellido,
                 correo: this.correo,
                 dni: this.dni,
                 telefono: this.telefono,
-                password: this.password,
                 fechaNacimiento: this.state.fecha,
-                genero: +this.state.genero
+                genero: this.state.genero
             }
 
 
-            Axios.post('Usuario/register', data).then(
+            if (data.nombre == null)
+                data.nombre = userNoEdit.nombre
+            if (data.apellido == null)
+                data.apellido = userNoEdit.apellido
+            if (data.correo == null)
+                data.correo = userNoEdit.correo
+            if (data.dni == null)
+                data.dni = userNoEdit.dni
+            if (data.telefono == null)
+                data.telefono = userNoEdit.telefono
+            if (data.fechaNacimiento == '')
+                data.fechaNacimiento = userNoEdit.fechaNacimiento
+            if (data.genero == null)
+                data.genero = userNoEdit.genero
+
+            Axios.put('Usuario', data).then(
                 res => {
-                    this.setState({ goBackToAdmUsuario: true })
+                    this.setState({
+                        goBackToAdmUsuario: true,
+                        process: 'edit'
+                    })
                 }
             ).catch(
                 err => {
                     console.log(err)
                 }
             )
+
+
+        } else {
+            if (this.password === this.confirmPassword) {
+                data = {
+                    nombre: this.nombre,
+                    apellido: this.apellido,
+                    correo: this.correo,
+                    dni: this.dni,
+                    telefono: this.telefono,
+                    password: this.password,
+                    fechaNacimiento: this.state.fecha,
+                    genero: +this.state.genero
+                }
+                
+                Axios.post('Usuario/register', data).then(
+                    res => {
+                        this.setState({
+                            goBackToAdmUsuario: true,
+                            process: 'created'
+                        })
+                    }
+                ).catch(
+                    err => {
+                        console.log(err)
+                    }
+                )
+            }
         }
+
+
 
 
     }
@@ -72,28 +139,58 @@ export default class SaveUsuario extends Component {
     render() {
 
         if (this.state.goBackToAdmUsuario) {
-            return <Redirect to={'/adm-usuarios'} />
+            return (
+                <div>
+                    <Redirect to={{
+                        pathname: '/adm-usuarios',
+                        state: { showModal: true, process: this.state.process }
+                    }} />
+                </div>
+            )
+
         }
 
+        let passwordField;
+        if (this.props.location.state.user.id) {
+            passwordField = (
+                <div></div>
+            )
+        } else {
+            passwordField = (
+                <div>
+                    <div className="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" className="form-control" placeholder="Contraseña"
+                            onChange={e => this.password = e.target.value} />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Confirmar Contraseña</label>
+                        <input type="password" className="form-control" placeholder="Confirmar contraseña"
+                            onChange={e => this.confirmPassword = e.target.value} />
+                    </div>
+                </div>
+            )
+        }
         return (
             <form onSubmit={this.handleSubmit}>
                 <h3>Registrar Usuario</h3>
 
                 <label>Seleccione su genero: </label>
                 <div className="form-check">
-                    <input className="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="0" onChange={this.handleGenero} />
+                    <input className="form-check-input" type="radio" name="exampleRadios" defaultChecked={this.props.location.state.user?.genero == 0 ? true : false} id="exampleRadios1" value="0" onChange={this.handleGenero} />
                     <label className="form-check-label" for="exampleRadios1">
                         Masculino
                     </label>
                 </div>
                 <div className="form-check">
-                    <input className="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="1" onChange={this.handleGenero} />
+                    <input className="form-check-input" type="radio" name="exampleRadios" defaultChecked={this.props.location.state.user?.genero == 1 ? true : false} id="exampleRadios2" value="1" onChange={this.handleGenero} />
                     <label className="form-check-label" for="exampleRadios2">
                         Femenino
                     </label>
                 </div>
                 <div className="form-check">
-                    <input className="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="2" onChange={this.handleGenero} />
+                    <input className="form-check-input" type="radio" name="exampleRadios" defaultChecked={this.props.location.state.user?.genero == 2 ? true : false} id="exampleRadios3" value="2" onChange={this.handleGenero} />
                     <label className="form-check-label" for="exampleRadios2">
                         Desconocido
                     </label>
@@ -103,52 +200,42 @@ export default class SaveUsuario extends Component {
 
                 <div className="form-group">
                     <label>Nombre</label>
-                    <input type="text" className="form-control" placeholder="Nombre"
+                    <input type="text" className="form-control" placeholder="Nombre" defaultValue={this.props.location.state.user?.nombre}
                         onChange={e => this.nombre = e.target.value} />
                 </div>
 
                 <div className="form-group">
                     <label>Apellido</label>
-                    <input type="text" className="form-control" placeholder="Apellido"
+                    <input type="text" className="form-control" placeholder="Apellido" defaultValue={this.props.location.state.user?.apellido}
                         onChange={e => this.apellido = e.target.value} />
                 </div>
 
                 <div className="form-group">
                     <label>Correo</label>
-                    <input type="email" className="form-control" placeholder="Correo"
+                    <input type="email" className="form-control" placeholder="Correo" defaultValue={this.props.location.state.user?.correo}
                         onChange={e => this.correo = e.target.value} />
                 </div>
 
                 <div className="form-group">
-                    <label>Fecha de Nacimiento</label>
-                    <br></br>
-                    <Datepicker className="form-control"  selected={this.state.fecha} onChange={this.onChange} dateFormat='dd/MM/yyyy'
-                        maxDate={new Date("2002", "01", "01")} showYearDropdown scrollableMonthYearDropdown />
-                </div>
-
-                <div className="form-group">
                     <label>Telefono</label>
-                    <input type="number" className="form-control" placeholder="Telefono"
+                    <input type="number" className="form-control" placeholder="Telefono" defaultValue={this.props.location.state.user?.telefono}
                         onChange={e => this.telefono = e.target.value} />
                 </div>
 
                 <div className="form-group">
                     <label>DNI</label>
-                    <input type="number" className="form-control" placeholder="Dni"
+                    <input type="number" className="form-control" placeholder="Dni" defaultValue={this.props.location.state.user?.dni}
                         onChange={e => this.dni = e.target.value} />
                 </div>
 
                 <div className="form-group">
-                    <label>Contraseña</label>
-                    <input type="password" className="form-control" placeholder="Contraseña"
-                        onChange={e => this.password = e.target.value} />
+                    <label>Fecha de Nacimiento</label>
+                    <br></br>
+                    <Datepicker className="form-control" selected={this.state.fecha == '' ? this.defaultValue : this.state.fecha} onChange={this.onChange} dateFormat='dd/MM/yyyy'
+                        maxDate={new Date("2002", "01", "01")} showYearDropdown scrollableMonthYearDropdown />
                 </div>
 
-                <div className="form-group">
-                    <label>Confirmar Contraseña</label>
-                    <input type="password" className="form-control" placeholder="Confirmar contraseña"
-                        onChange={e => this.confirmPassword = e.target.value} />
-                </div>
+                {passwordField}
 
                 <button className="btn btn-primary btn-block">Registrar</button>
             </form>

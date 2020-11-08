@@ -1,16 +1,46 @@
 import Axios from 'axios';
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom';
-import Navbar from 'react-bootstrap/Navbar'
 import { NavDropdown } from 'react-bootstrap';
+import Notifications, { notify } from '../../components/Notification';
 
 export default class AdmUsuarios extends Component {
 
+    constructor(props) {
+        super(props)
 
-    state = {};
+
+    }
+
+
+    state = {
+        emptyUser: {
+            nombre: '',
+            apellido: '',
+            correo: '',
+            dni: 0,
+            telefono: 0,
+            password: '',
+            fechaNacimiento: new Date("2002", "01", "01"),
+            genero: null
+        },
+        selectedFile: null
+    };
 
     componentDidMount = () => {
+        if (this.props) {
+            if (this.props.location.state?.showModal) {
+                if (this.props.location.state?.process === 'created') {
+                    notify('created')
+                } else if (this.props.location.state?.process === 'edit') {
+                    notify('edit')
+                }
+            }
+        }
+        this.loadUsers();
+    }
 
+    loadUsers() {
         Axios.get('Usuario').then(
             res => {
                 this.setUsers(res.data)
@@ -20,6 +50,7 @@ export default class AdmUsuarios extends Component {
             }
         )
     }
+
 
     setUsers = users => {
         this.setState({
@@ -62,21 +93,66 @@ export default class AdmUsuarios extends Component {
         })
     }
 
-    editUserView = (id) => {
+    editUserView = (user) => {
         this.setState({
             goToEditUser: true,
-            id: id
+            id: user.id,
+            user: user
         })
     }
+
+    onFileChange = event => {
+
+        // Update the state 
+        this.setState({ selectedFile: event.target.files[0] });
+
+    };
+
+    onFileUpload = () => {
+
+        const formData = new FormData();
+
+        formData.append(
+            "files",
+            this.state.selectedFile,
+            this.state.selectedFile.name
+        );
+
+        // Details of the uploaded file 
+        console.log(this.state.selectedFile);
+
+        Axios({
+            url: 'FileUpload', method: 'post',
+            responseType: 'text', data: formData
+        }).then(
+            res => {
+                console.log(res)
+                Axios.post('Usuario/loadUsersExcel/' + this.state.selectedFile.name).then(
+                    res => {
+                        this.loadUsers();
+                    }
+                )
+            }
+        )
+    };
+
+
+
 
     render() {
 
         if (this.state.redirectToSaveUsuario) {
-            return <Redirect to={'/register/0' } />;
+            return <Redirect to={{
+                pathname: '/register/0',
+                state: { user: this.state.emptyUser }
+            }} />;
         }
 
         if (this.state.goToEditUser) {
-            return <Redirect to={'/register/' + this.state.id}/>;
+            return <Redirect to={{
+                pathname: '/register/' + this.state.id,
+                state: { user: this.state.user }
+            }} />;
         }
 
         return (
@@ -86,6 +162,16 @@ export default class AdmUsuarios extends Component {
                     <NavDropdown.Item onClick={this.downloadPDF}>Export PDF</NavDropdown.Item>
                     <NavDropdown.Item onClick={this.donwloadCsv}>Export Excel</NavDropdown.Item>
                 </NavDropdown>
+
+                <div>
+                    <input class="form-control-file" type="file" onChange={this.onFileChange} />
+                    <br></br>
+                    <button className="btn btn-primary" onClick={this.onFileUpload}>
+                        Subir archivo
+                </button>
+                </div>
+                <br></br>
+                <Notifications />
                 <table className="table">
                     <thead>
                         <tr>
@@ -108,7 +194,7 @@ export default class AdmUsuarios extends Component {
                                     <td>{user.telefono}</td>
                                     <td>{user.dni}</td>
                                     <td>
-                                        <button type="button" onClick={() => this.editUserView(user.id)} className="btn btn-primary btn-sm ">Editar</button>
+                                        <button type="button" onClick={() => this.editUserView(user)} className="btn btn-primary btn-sm ">Editar</button>
                                         <button type="button" className="btn btn-danger btn-sm ml-2">Eliminar</button>
                                     </td>
                                 </tr>
