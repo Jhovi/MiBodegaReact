@@ -12,22 +12,21 @@ export default class EditProducto extends Component {
     
     constructor(props) {
         super(props);
-        this.handleSubmit = this.handleSubmit.bind(this)
-    }
+        this.handleSubmit = this.handleSubmit.bind(this)        
+         this.nombre = this.props.location.state.producto.nombre
+         this.descripcion = this.props.location.state.producto.descripcion
+         this.precio = this.props.location.state.producto.precio            
+         this.categoria = this.props.location.state.producto.categoria
+         this.estado = this.props.location.state.producto.estado
+         this.stock = this.props.location.state.producto.stock
+    
+    }   
+
     
     handleSubmit = e => {
         e.preventDefault();
-        let data = {}
-        
-        var nuevoproducto = {
-            id : this.props.location.state.producto.id,
-            nombre : this.props.location.state.producto.nombre,
-            descripcion : this.props.location.state.producto.descripcion,
-            precio : this.props.location.state.producto.precio,            
-            categoria : this.props.location.state.producto.categoria,
-            estado : this.props.location.state.producto.estado,
-            stock : this.props.location.state.producto.stock
-        }
+        let data = {}    
+       
 
             data = {
                 id: this.props.location.state.producto.id,
@@ -39,18 +38,6 @@ export default class EditProducto extends Component {
                 stock: this.stock
                
             }
-            if(data.nombre == null)
-            data.nombre = nuevoproducto.nombre
-            if(data.descripcion == null)
-            data.descripcion = nuevoproducto.descripcion
-            if(data.precio == null)
-            data.precio = nuevoproducto.precio
-            if(data.categoria == null)
-            data.categoria = nuevoproducto.categoria
-            if(data.estado == null)
-            data.estado = nuevoproducto.estado
-            if(data.stock == null)
-            data.stock = nuevoproducto.stock           
             
             Axios.put('Producto', data).then(
                 res => {

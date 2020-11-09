@@ -9,12 +9,14 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Input, L
 
 
 const saveproductos = []
-const subtotales = []
 export default class SaveBoleta extends Component {
 
     state = {
         abierto: false,
         fecha: '',
+        subtotales: [],
+        detalleproducto: []
+        
            
     }
     
@@ -60,14 +62,17 @@ export default class SaveBoleta extends Component {
 
     handleSubmit = e => {
         e.preventDefault();
-        let data = {}
+        let data = {}        
 
-        data = {
-          
-
+        data = { 
+            
+            UsuarioId: this.state.selectedusuario.id,
+            Fecha: this.state.fecha,
+            Direccion: this.direccion,                        
+            DetalleBoleta: this.state.detalleproducto
         }
-
-
+        console.log(data)
+        
         Axios.post('Boleta', data).then(
             res => {
                 this.setState({ goBackToAdmProducto: true })
@@ -101,14 +106,35 @@ export default class SaveBoleta extends Component {
         console.log(saveproductos)
         this.abrirModalP()
     }
-    agregarcantidad(cantidad) {                       
-        subtotales.push(cantidad)
-        console.log(subtotales)        
+    agregarcantidad(cantidad,producto,indice) {
+        var idproducto = producto.id  
+        var detalle = {ProductoId: idproducto, Cantidad: cantidad}
+
+        var index = this.state.detalleproducto.findIndex((value)=>{
+            return value.ProductoId == producto.id
+        })
+        var det = this.state.detalleproducto
+
+        if(index == -1){
+            det.push(detalle)            
+        }
+        else{
+           det[index].Cantidad = cantidad
+        }  
+
+        var test = this.state.subtotales
+        test[indice] = cantidad*producto.precio
+        this.setState({            
+            subtotales: test,
+            detalleproducto: det
+        })            
+        console.log(this.state.detalleproducto)  
+          
     }   
 
 
     render() {
-        console.log(this.state.selectedusuario)
+        console.log(this.state.selectedusuario)        
         const modalStyles = {
 
             position: "absolute",
@@ -248,9 +274,9 @@ export default class SaveBoleta extends Component {
                                 <tr key={index}> 
                                                                      
                                      <td>{product.nombre}</td>
-                                     <td><input type="number" className="form-control" onChange={e => this.agregarcantidad(e.target.value)} placeholder="Cantidad"/></td>
+                                     <td><input type="number" className="form-control" onChange={e => this.agregarcantidad(e.target.value,product,index)} placeholder="Cantidad"/></td>
                                      <td>{product.precio}</td>                                     
-                                     <td></td>                                                                                                                           
+                                     <td>{this.state.subtotales[index]}</td>                                                                                                                         
                                 </tr>
                             )
                         })}

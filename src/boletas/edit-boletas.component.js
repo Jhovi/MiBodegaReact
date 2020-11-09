@@ -8,11 +8,15 @@ import '../App.css';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Input, Label } from 'reactstrap';
 import Moment from 'moment';
 
+
+const saveproductos = []
+const subtotales = []
 export default class EditBoleta extends Component {
 
     state = {
-        fecha: new Date()
-    }    
+        fecha: new Date(),
+        nombre: ''
+    }
 
     constructor(props) {
         super(props);
@@ -33,47 +37,70 @@ export default class EditBoleta extends Component {
                 console.log(err);
             }
         )
+
+        Axios.get('Producto').then(
+            res => {
+                this.setproducts(res.data)
+            },
+            err => {
+                console.log(err);
+            }
+        )       
+
         Moment.locale('en');
         var dt = this.props.location.state.boleta.fecha;
-        var data = Moment(dt).format('DD/MM/YYYY')
-        console.log(data)
+        var data = Moment(dt).format('DD/MM/YYYY')       
         var d = new Date(data)
         this.setState({
             fecha: d
-        }) 
-        console.log(d) 
+        })     
+        
     }
 
-    setUsers = users => {
+    setUsers = users => {        
+        var user
+        for (var i = 0; i < users.length; i++) {
+            if(users[i].id == this.props.location.state.boleta.usuarioId){
+                user = users[i];   
+                break;             
+            }            
+        }
         this.setState({
-            users: users
+            users: users,
+            nombre: user.nombre + " " + user.apellido
         })
     }
 
-    escogerUsuario(usuario) {
-        this.userdetected = usuario
-        this.setState({            
-            selectedusuario: usuario
-        })        
-        console.log(this.userdetected.nombre)
-        
-          
-        this.abrirModal()
-       
-    }  
-
     
+    setproducts = products =>{
+        this.setState({
+            products: products
+           })
+    }
+
+
+    escogerUsuario(usuario) {
+        this.setState({
+            selectedusuario: usuario
+        })
+        this.abrirModalU()
+
+    }
+
+
 
     handleSubmit = e => {
         e.preventDefault();
-        let data = {}
+        let data = {}        
+    
 
         var nuevaboleta = {
             id: this.props.location.state.boleta.id,
             nombre: this.props.location.state.boleta.usuarioId,
             descripcion: this.props.location.state.boleta.fecha,
             precio: this.props.location.state.boleta.direccion,
-            categoria: this.props.location.state.boleta.total,            
+            categoria: this.props.location.state.boleta.total,
+            
         }
 
         data = {
@@ -81,7 +108,7 @@ export default class EditBoleta extends Component {
             usuarioId: this.usuarioId,
             fecha: this.fecha,
             direccion: this.direccion,
-            total: this.total
+           
 
         }
         if (data.id == null)
@@ -91,7 +118,7 @@ export default class EditBoleta extends Component {
         if (data.fecha == null)
             data.fecha = nuevaboleta.fecha
         if (data.direccion == null)
-            data.direccion = nuevaboleta.direccion        
+            data.direccion = nuevaboleta.direccion
 
         Axios.put('Boleta', data).then(
             res => {
@@ -102,9 +129,6 @@ export default class EditBoleta extends Component {
                 console.log(err)
             }
         )
-
-
-
     }
 
     onTodoChange(value) {
@@ -113,13 +137,38 @@ export default class EditBoleta extends Component {
         });
     }
 
-    abrirModal = () => {
-        this.setState({ abierto: !this.state.abierto })
+    abrirModalU = () => {
+        this.setState({ abiertoU: !this.state.abiertoU })
+    }
+
+    abrirModalP = () => {
+        this.setState({ abiertoP: !this.state.abiertoP })
+    }
+
+
+    escogerUsuario(usuario) {
+        this.setState({
+            selectedusuario: usuario
+        })
+        this.abrirModalU()
+
+    }
+
+    escogerProducto(producto) {
+        saveproductos.push(producto)
+        console.log(saveproductos)
+        this.abrirModalP()
+    }
+    agregarcantidad(cantidad, costo, index) {
+        
+        subtotales[index] = cantidad * costo
+        console.log(subtotales[index])
+
     }
 
     render() {
-
-              
+        console.log(this.state.selectedusuario)
+        console.log(this.state.users + "aaaa")
         const modalStyles = {
 
             position: "absolute",
@@ -127,7 +176,7 @@ export default class EditBoleta extends Component {
             left: '50%',
             transform: 'translate(-50%,-50%)'
         }
-       
+
 
 
         if (this.state.goBackToAdmBoleta) {
@@ -139,22 +188,22 @@ export default class EditBoleta extends Component {
                 <h3>Editar Boleta</h3>
 
                 <div className="form-group">
-                    <label>Seleccionar usuario</label>
-                    <input type="text" className="form-control" placeholder="Nombre"
-                        onClick={this.abrirModal} />
+                    <label>seleccionar usuario</label>
+                    <input type="text" className="form-control" placeholder="Nombre" value={(this.state.selectedusuario == undefined) ? this.state.nombre : this.state.selectedusuario.nombre + " " + this.state.selectedusuario.apellido}
+                        onClick={this.abrirModalU} />
                 </div>
 
-            <Modal isOpen={this.state.abierto} style={modalStyles}>
+                <Modal isOpen={this.state.abiertoU} style={modalStyles}>
                     <ModalHeader>
                         Seleccionar usuario
-            </ModalHeader>
+                    </ModalHeader>
 
                     <ModalBody>
 
                         <table className="table">
                             <thead>
                                 <tr>
-                                    <th scope="col">Codigo Cliente</th>
+                                    <th scope="col">Codigo</th>
                                     <th scope="col">Nombres</th>
                                     <th scope="col">Correo</th>
                                     <th scope="col">Telefono</th>
@@ -179,7 +228,7 @@ export default class EditBoleta extends Component {
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button color="secondary" onClick={this.abrirModal}>Cerrar</Button>
+                        <Button color="secondary" onClick={this.abrirModalU}>Cerrar</Button>
                     </ModalFooter>
 
                 </Modal>
@@ -188,86 +237,89 @@ export default class EditBoleta extends Component {
                 <div className="form-group">
                     <label>Fecha</label>
                     <br></br>
-                    <Datepicker className="form-control" onChange={this.onChange} dateFormat='dd/MM/yyyy' selected = {this.state.fecha}
+                    <Datepicker className="form-control" onChange={this.onChange} dateFormat='dd/MM/yyyy' selected={this.state.fecha}
                         maxDate={new Date("2021", "01", "01")} showYearDropdown scrollableMonthYearDropdown />
                 </div>
 
                 <div className="form-group">
                     <label>Direccion</label>
-                    <input type="text" className="form-control" placeholder="Direccion" defaultValue = {this.props.location.state.boleta.direccion}
+                    <input type="text" className="form-control" placeholder="Direccion" defaultValue={this.props.location.state.boleta.direccion}
                         onChange={e => this.direccion = e.target.value} />
-                </div>               
+                </div>
 
                 <form>
-                <h3>Detalles de los producto</h3>
-                <button type="button"  onClick={this.abrirModal}  className="btn btn-primary  btn-register-user">Agregar nuevo producto</button>
+                    <h3>Detalles de los producto</h3>
+                    <button type="button" onClick={this.abrirModalP} className="btn btn-primary  btn-register-user">Agregar nuevo producto</button>
 
-                <Modal isOpen={this.state.abierto} style={modalStyles}>
-                    <ModalHeader>
-                        Seleccionar usuario
+                    <Modal isOpen={this.state.abiertoP} style={modalStyles}>
+                        <ModalHeader>
+                            Seleccionar Fecha
             </ModalHeader>
 
-                    <ModalBody>
+                        <ModalBody>
 
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Codigo Cliente</th>
-                                    <th scope="col">Nombres</th>
-                                    <th scope="col">Correo</th>
-                                    <th scope="col">Telefono</th>
-                                </tr>
-                            </thead>
-                            <tbody >
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Codigo</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Precio</th>
+                                        <th scope="col">Categoria</th>
+                                    </tr>
+                                </thead>
+                                <tbody >
 
-                                {this.state.users && this.state.users.map((user, index) => {
-                                    return (
-                                        <tr key={index} onClick={() => this.escogerUsuario(user)}>
-                                            <td>{user.id}</td>
-                                            <td>{user.nombre} {user.apellido}</td>
-                                            <td>{user.correo}</td>
-                                            <td>{user.telefono}</td>
+                                    {this.state.products && this.state.products.map((product, index) => {
+                                        return (
+                                            <tr key={index} onClick={() => this.escogerProducto(product)}>
+                                                <td>{product.id}</td>
+                                                <td>{product.nombre}</td>
+                                                <td>{product.precio}</td>
+                                                <td>{product.categoria}</td>
 
-                                        </tr>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
+                                            </tr>
+                                        )
+                                    })}
+                                </tbody>
+                            </table>
 
-                    </ModalBody>
+                        </ModalBody>
 
-                    <ModalFooter>
-                        <Button color="secondary" onClick={this.abrirModal}>Cerrar</Button>
-                    </ModalFooter>
+                        <ModalFooter>
+                            <Button color="secondary" onClick={this.abrirModalP}>Cerrar</Button>
+                        </ModalFooter>
 
-                </Modal>
+                    </Modal>
 
 
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Producto</th>
-                            <th scope="col">Cantidad</th>
-                            <th scope="col">SubTotal</th>                              
-                        </tr>
-                    </thead>                   
-                    <tbody>
-                        {this.state.bills && this.state.bills.map((bill, index) => {
-                            return (
-                                
-                                <tr key={index}>                                   
-                                    <td>test</td>                               
-                                    <td>test</td>                                    
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </table>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Producto</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Precio</th>
+                                <th scope="col">SubTotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {saveproductos && saveproductos.map((product, index) => {
+                                return (
+                                    <tr key={index}>
+
+                                        <td>{product.nombre}</td>
+                                        <td><input type="number" className="form-control" onChange={e => this.agregarcantidad(e.target.value, product.precio, index)} placeholder="Cantidad" /></td>
+                                        <td>{product.precio}</td>
+                                        <td>{subtotales[index]}</td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </table>
                 </form>
 
                 <div className="form-group">
                     <label>total</label>
-                    <input type="number" className="form-control" placeholder="Precio" disabled = "true"  defaultValue = {this.props.location.state.boleta.total}                 />
+                    <input type="number" className="form-control" placeholder="Precio" disabled="true" defaultValue={this.props.location.state.boleta.total} />
                 </div>
 
                 <button className="btn btn-primary btn-block" >Registrar</button>
