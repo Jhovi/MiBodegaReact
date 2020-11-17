@@ -28,15 +28,15 @@ const finalSpaceCharacters = [
 
 export default class SaveUsuario extends Component {
 
+    
+    defaultValue = new Date(this.props.location.state.user.fechaNacimiento);
+
     state = {
         fecha: ''
     }
 
-    defaultValue = new Date(this.props.location.state.user.fechaNacimiento);
-
-
     constructor(props) {
-        super(props);
+        super(props)
     }
 
     onChange = fecha => {
@@ -160,13 +160,13 @@ export default class SaveUsuario extends Component {
                 <div>
                     <div className="form-group">
                         <label>Contraseña</label>
-                        <input type="password" className="form-control" placeholder="Contraseña"
+                        <input type="password" className="form-control" placeholder="Contraseña" id="password"
                             onChange={e => this.password = e.target.value} />
                     </div>
 
                     <div className="form-group">
                         <label>Confirmar Contraseña</label>
-                        <input type="password" className="form-control" placeholder="Confirmar contraseña"
+                        <input type="password" className="form-control" placeholder="Confirmar contraseña" id="confirm-password"
                             onChange={e => this.confirmPassword = e.target.value} />
                     </div>
                 </div>
@@ -200,31 +200,31 @@ export default class SaveUsuario extends Component {
 
                 <div className="form-group">
                     <label>Nombre</label>
-                    <input type="text" className="form-control" placeholder="Nombre" defaultValue={this.props.location.state.user?.nombre}
+                    <input type="text" className="form-control" placeholder="Nombre" id="nombre" defaultValue={this.props.location.state.user?.nombre}
                         onChange={e => this.nombre = e.target.value} />
                 </div>
 
                 <div className="form-group">
                     <label>Apellido</label>
-                    <input type="text" className="form-control" placeholder="Apellido" defaultValue={this.props.location.state.user?.apellido}
+                    <input type="text" className="form-control" placeholder="Apellido" id="apellido" defaultValue={this.props.location.state.user?.apellido}
                         onChange={e => this.apellido = e.target.value} />
                 </div>
 
                 <div className="form-group">
                     <label>Correo</label>
-                    <input type="email" className="form-control" placeholder="Correo" defaultValue={this.props.location.state.user?.correo}
+                    <input type="email" className="form-control" placeholder="Correo" id="correo" defaultValue={this.props.location.state.user?.correo}
                         onChange={e => this.correo = e.target.value} />
                 </div>
 
                 <div className="form-group">
                     <label>Telefono</label>
-                    <input type="number" className="form-control" placeholder="Telefono" defaultValue={this.props.location.state.user?.telefono}
+                    <input type="number" className="form-control" placeholder="Telefono" id="telefono" defaultValue={this.props.location.state.user?.telefono}
                         onChange={e => this.telefono = e.target.value} />
                 </div>
 
                 <div className="form-group">
                     <label>DNI</label>
-                    <input type="number" className="form-control" placeholder="Dni" defaultValue={this.props.location.state.user?.dni}
+                    <input type="number" className="form-control" placeholder="Dni" id="dni" defaultValue={this.props.location.state.user?.dni}
                         onChange={e => this.dni = e.target.value} />
                 </div>
 
@@ -232,12 +232,12 @@ export default class SaveUsuario extends Component {
                     <label>Fecha de Nacimiento</label>
                     <br></br>
                     <Datepicker className="form-control" selected={this.state.fecha == '' ? this.defaultValue : this.state.fecha} onChange={this.onChange} dateFormat='dd/MM/yyyy'
-                        maxDate={new Date("2002", "01", "01")} showYearDropdown scrollableMonthYearDropdown />
+                       id="fechaNacimiento" maxDate={new Date("2002", "01", "01")} showYearDropdown scrollableMonthYearDropdown />
                 </div>
 
                 {passwordField}
 
-                <button className="btn btn-primary btn-block">Registrar</button>
+                <button id="btn-save" className="btn btn-primary btn-block">Registrar</button>
             </form>
         )
     }

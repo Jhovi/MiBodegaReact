@@ -76,7 +76,15 @@ export default class Notifications extends Component {
             return (
                 <Container top={this.state.top}> <FcApproval /> Actualizado correctamente </Container>
             )
-        } else {
+        } else if (this.state.msg === 'archivoAdded') {
+            return (
+                <Container top={this.state.top}> <FcApproval /> Usuarios agregados correctamente </Container>
+            )
+        } else if (this.state.msg === 'archivoProblem') {
+            return (
+                <Container top={this.state.top}> <FcHighPriority /> Problemas al leer el archivo </Container>
+            )
+        }else {
             return (
                 <Container top={this.state.top}> <FcHighPriority /> Datos incorrectos </Container>
             )

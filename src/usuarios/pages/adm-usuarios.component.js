@@ -3,29 +3,62 @@ import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom';
 import { NavDropdown } from 'react-bootstrap';
 import Notifications, { notify } from '../../components/Notification';
+import ReactPaginate from 'react-paginate';
 
 export default class AdmUsuarios extends Component {
 
     constructor(props) {
         super(props)
 
+        this.state = {
+            offset: 0,
+            tableData: [],
+            orgtableData: [],
+            perPage: 5,
+            currentPage: 0,
+            emptyUser: {
+                nombre: '',
+                apellido: '',
+                correo: '',
+                dni: 0,
+                telefono: 0,
+                password: '',
+                fechaNacimiento: new Date("2002", "01", "01"),
+                genero: null
+            },
+            selectedFile: null
+        }
+        this.handlePageClick = this.handlePageClick.bind(this);
 
     }
 
 
-    state = {
-        emptyUser: {
-            nombre: '',
-            apellido: '',
-            correo: '',
-            dni: 0,
-            telefono: 0,
-            password: '',
-            fechaNacimiento: new Date("2002", "01", "01"),
-            genero: null
-        },
-        selectedFile: null
+ 
+  
+
+    handlePageClick = (e) => {
+        const selectedPage = e.selected;
+        const offset = selectedPage * this.state.perPage;
+
+        this.setState({
+            currentPage: selectedPage,
+            offset: offset
+        }, () => {
+            this.loadMoreData()
+        });
+
     };
+
+    loadMoreData() {
+		const data = this.state.orgtableData;
+		
+		const slice = data.slice(this.state.offset, this.state.offset + this.state.perPage)
+		this.setState({
+			pageCount: Math.ceil(data.length / this.state.perPage),
+			tableData:slice
+		})
+	
+    }
 
     componentDidMount = () => {
         if (this.props) {
@@ -43,7 +76,16 @@ export default class AdmUsuarios extends Component {
     loadUsers() {
         Axios.get('Usuario').then(
             res => {
-                this.setUsers(res.data)
+                var data = res.data;
+				
+                var slice = data.slice(this.state.offset, this.state.offset + this.state.perPage)
+                
+
+                this.setState({
+                    pageCount: Math.ceil(data.length / this.state.perPage),
+                    orgtableData :res.data,
+                    tableData:slice
+                })
             },
             err => {
                 console.log(err);
@@ -111,6 +153,7 @@ export default class AdmUsuarios extends Component {
     onFileUpload = () => {
 
         const formData = new FormData();
+        var extension = '';
 
         formData.append(
             "files",
@@ -118,22 +161,53 @@ export default class AdmUsuarios extends Component {
             this.state.selectedFile.name
         );
 
+        var pos = this.state.selectedFile.name.indexOf('.');
+        extension = this.state.selectedFile.name.slice(-(this.state.selectedFile.name.length - pos));
         // Details of the uploaded file 
         console.log(this.state.selectedFile);
+        console.log(extension);
 
-        Axios({
-            url: 'FileUpload', method: 'post',
-            responseType: 'text', data: formData
-        }).then(
-            res => {
-                console.log(res)
-                Axios.post('Usuario/loadUsersExcel/' + this.state.selectedFile.name).then(
-                    res => {
-                        this.loadUsers();
-                    }
-                )
-            }
-        )
+
+        if (extension == '.txt') {
+            Axios({
+                url: 'FileUpload', method: 'post',
+                responseType: 'text', data: formData
+            }).then(
+                res => {
+                    console.log(res)
+                    Axios.post('Usuario/LoadUsers/' + this.state.selectedFile.name).then(
+                        res => {
+                            notify('archivoAdded')
+                            this.loadUsers();
+                        },
+                        err => {
+                            notify('archivoProblem')
+                        }
+                    )
+                }
+            )
+        } else if (extension == '.xlsx') {
+            Axios({
+                url: 'FileUpload', method: 'post',
+                responseType: 'text', data: formData
+            }).then(
+                res => {
+                    console.log(res)
+                    Axios.post('Usuario/loadUsersExcel/' + this.state.selectedFile.name).then(
+                        res => {
+                            notify('archivoAdded')
+                            this.loadUsers();
+                        },
+                        err => {
+                            notify('archivoProblem')
+                        }
+                    )
+                }
+            )
+        } else {
+            notify('archivoProblem')
+        }
+
     };
 
 
@@ -158,15 +232,15 @@ export default class AdmUsuarios extends Component {
         return (
             <div>
                 <button type="button" onClick={this.saveUsuarioView} className="btn btn-primary  btn-register-user">Registrar Usuario</button>
-                <NavDropdown title="Export" id="basic-nav-dropdown" className="btn btn-export-file">
-                    <NavDropdown.Item onClick={this.downloadPDF}>Export PDF</NavDropdown.Item>
-                    <NavDropdown.Item onClick={this.donwloadCsv}>Export Excel</NavDropdown.Item>
+                <NavDropdown title="Export" id="btn-export" className="btn btn-export-file">
+                    <NavDropdown.Item id="btn-export-pdf" onClick={this.downloadPDF}>Export PDF</NavDropdown.Item>
+                    <NavDropdown.Item id="btn-export-excel" onClick={this.donwloadCsv}>Export Excel</NavDropdown.Item>
                 </NavDropdown>
 
                 <div>
-                    <input class="form-control-file" type="file" onChange={this.onFileChange} />
+                    <input class="form-control-file" id="btn-import-file" type="file" onChange={this.onFileChange} />
                     <br></br>
-                    <button className="btn btn-primary" onClick={this.onFileUpload}>
+                    <button className="btn btn-primary" id="btn-upload" onClick={this.onFileUpload}>
                         Subir archivo
                 </button>
                 </div>
@@ -185,7 +259,7 @@ export default class AdmUsuarios extends Component {
                     </thead>
                     <tbody>
 
-                        {this.state.users && this.state.users.map((user, index) => {
+                        {this.state.tableData && this.state.tableData.map((user, index) => {
                             return (
                                 <tr key={index}>
                                     <td>{user.id}</td>
@@ -202,6 +276,18 @@ export default class AdmUsuarios extends Component {
                         })}
                     </tbody>
                 </table>
+                <ReactPaginate
+                    previousLabel={"prev"}
+                    nextLabel={"next"}
+                    breakLabel={"..."}
+                    breakClassName={"break-me"}
+                    pageCount={this.state.pageCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={this.handlePageClick}
+                    containerClassName={"pagination"}
+                    subContainerClassName={"pages pagination"}
+                    activeClassName={"active"}/>
             </div>
         )
     }
