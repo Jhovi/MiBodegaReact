@@ -16,6 +16,7 @@ export default class AdmProductos extends Component {
     state = {
         valor1: '',
         selectedproduct: { nombre: "", descripcion: "", precio: "", categoria: "", estado: "", stock: "" },
+        newproduct:{ nombre: "", descripcion: "", precio: "", categoria: "", estado: "valido", stock: "" },
         categorias: ["Whisky", "Ron", "Cerveza", "Vino", "Vodka", "Tequila", "Piqueos", "Otros"]
     }
 
@@ -40,7 +41,7 @@ export default class AdmProductos extends Component {
 
     saveProductoView = () => {
         this.setState({
-            redirectToSaveProducto: true
+            crearproducto: !this.state.crearproducto
         })
 
     }
@@ -48,8 +49,7 @@ export default class AdmProductos extends Component {
     editProductoView(product) {
 
         this.setState({
-            abiertoP: !this.state.abiertoP,
-            // redirectToEditProducto: true,
+            abiertoP: !this.state.abiertoP,          
             selectedproduct: product
         })
     }
@@ -62,6 +62,14 @@ export default class AdmProductos extends Component {
             dropdownOpen: !this.state.dropdownOpen
         })       
     }    
+    insertarcategoria(val) {
+        var temp = this.state.newproduct
+        temp.categoria = val
+        this.setState({
+            newproduct: temp,
+            dropdownOpen: !this.state.dropdownOpen
+        })       
+    }  
 
     toggle = () => {
         this.setState({
@@ -76,6 +84,12 @@ export default class AdmProductos extends Component {
         })
     }
 
+    CerrarCrearProducto = () => {
+        this.setState({
+            crearproducto: !this.state.crearproducto
+        })
+    }
+
     ActualizarProducto = () => {
         Axios.put('Producto', this.state.selectedproduct).then(
             res => {
@@ -87,6 +101,18 @@ export default class AdmProductos extends Component {
             }
         )   
     }
+    
+    CrearProducto = () => {       
+        Axios.post('Producto', this.state.newproduct).then(
+            res => {
+                this.setState({  crearproducto: !this.state.crearproducto })
+            }
+        ).catch(
+            err => {
+                console.log(err)
+            }
+        ) 
+    }
 
 
 
@@ -94,14 +120,7 @@ export default class AdmProductos extends Component {
         console.log(this.state.valor1)
         if (this.state.redirectToSaveProducto) {
             return <Redirect to={'/adm-productos/registrar'} />;
-        }
-
-        if (this.state.redirectToEditProducto) {
-            return <Redirect to={{
-                pathname: "/adm-productos/editar",
-                state: { producto: this.state.selectedproduct }
-            }} />;
-        }
+        }    
 
         const modalStyles = {
 
@@ -198,6 +217,55 @@ export default class AdmProductos extends Component {
                         <ModalFooter>
                             <Button color="primary" onClick={this.ActualizarProducto}>Actualizar</Button>
                             <Button color="secondary" onClick={this.CerrarModalP}>Cerrar</Button>
+                        </ModalFooter>
+
+                    </Modal>
+
+                    <Modal isOpen={this.state.crearproducto} style={modalStyles}>
+                        <ModalHeader>
+                            Producto a editar
+                    </ModalHeader>
+
+                        <ModalBody>
+
+                            <FormGroup>
+                                <Label for="Nombre"> Nombre</Label>
+                                <Input input type="text" className="form-control" placeholder = "Nombre"
+                                 onChange={e => this.state.newproduct.nombre = e.target.value}> </Input>
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="Descripcion"> Descripcion</Label>
+                                <Input type="text" className="form-control" placeholder = "Descripción"
+                                    onChange={e => this.state.newproduct.descripcion = e.target.value} > </Input>
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="Precio"> Precio</Label>
+                                <Input type="number" className="form-control" placeholder = "Precio"
+                                    onChange={e => this.state.newproduct.precio = e.target.value}> </Input>
+                            </FormGroup>
+                            <FormGroup>                            
+                                <Label for="Categoria"> Categoria</Label>
+                                <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                                    <DropdownToggle>
+                                        Categorias
+                                </DropdownToggle>
+                                    <DropdownMenu>
+                                    {this.state.categorias.map(val =>
+                                     <DropdownItem onClick={() => this.insertarcategoria(val)}>{val}</DropdownItem>)}                                       
+                                    </DropdownMenu>
+                                </Dropdown>
+                            </FormGroup>                            
+                            <FormGroup>
+                                <Label for="Stock"> Stock</Label>
+                                <Input type="text" className="form-control" placeholder = "Stock"
+                                    onChange={e => this.state.newproduct.stock = e.target.value}> </Input>
+                            </FormGroup>
+
+                        </ModalBody>
+
+                        <ModalFooter>
+                            <Button color="primary" onClick={this.CrearProducto}>Actualizar</Button>
+                            <Button color="secondary" onClick={this.CerrarCrearProducto}>Cerrar</Button>
                         </ModalFooter>
 
                     </Modal>
