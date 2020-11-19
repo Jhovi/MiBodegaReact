@@ -41,7 +41,6 @@ export default class AdmBoleta extends Component {
             redirectToEditboleta: true,
             selectedbill: bill
         })
-        console.log(bill)
     }       
 
     render() {

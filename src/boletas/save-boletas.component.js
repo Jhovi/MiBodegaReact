@@ -146,7 +146,7 @@ export default class SaveBoleta extends Component {
        
 
         if (this.state.goBackToAdmProducto) {
-            return <Redirect to={'/adm-productos'} />
+            return <Redirect to={'/adm-boletas'} />
         }
 
         return (
@@ -271,8 +271,7 @@ export default class SaveBoleta extends Component {
                     <tbody>
                         {saveproductos && saveproductos.map((product, index) => {
                             return (                                
-                                <tr key={index}> 
-                                                                     
+                                <tr key={index}>                                                             
                                      <td>{product.nombre}</td>
                                      <td><input type="number" className="form-control" onChange={e => this.agregarcantidad(e.target.value,product,index)} placeholder="Cantidad"/></td>
                                      <td>{product.precio}</td>                                     
@@ -286,7 +285,7 @@ export default class SaveBoleta extends Component {
 
                 <div className="form-group">
                     <label>total</label>
-                    <input type="number" className="form-control" placeholder="Precio" disabled = "true"                   />
+                    <input type="number" className="form-control" placeholder="Precio" disabled = "true"/>
                 </div>
 
                 <button className="btn btn-primary btn-block" >Registrar</button>
