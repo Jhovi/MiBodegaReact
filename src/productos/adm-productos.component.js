@@ -16,8 +16,9 @@ export default class AdmProductos extends Component {
     state = {
         valor1: '',
         selectedproduct: { nombre: "", descripcion: "", precio: "", categoria: "", estado: "", stock: "" },
-        newproduct:{ nombre: "", descripcion: "", precio: "", categoria: "", estado: "valido", stock: "" },
-        categorias: ["Whisky", "Ron", "Cerveza", "Vino", "Vodka", "Tequila", "Piqueos", "Otros"]
+        newproduct:{ nombre: "", descripcion: "", precio: "", categoria: "Escoger", estado: "valido", stock: "" },
+        categorias: ["Whisky", "Ron", "Cerveza", "Vino", "Vodka", "Tequila", "Piqueos", "Otros"],
+        dropDownValue: ""
     }
 
     componentDidMount = () => {
@@ -54,7 +55,7 @@ export default class AdmProductos extends Component {
         })
     }
 
-    insertarvalor1(val) {
+    insertarvalor1(val) {       
         var temp = this.state.selectedproduct
         temp.categoria = val
         this.setState({
@@ -114,6 +115,9 @@ export default class AdmProductos extends Component {
         ) 
     }
 
+    changeValue(e) {
+        this.setState({dropDownValue: e.currentTarget.textContent})
+      }
 
 
     render() {
@@ -193,11 +197,14 @@ export default class AdmProductos extends Component {
                                 <Label for="Categoria"> Categoria</Label>
                                 <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                                     <DropdownToggle>
-                                        Categorias
-                                </DropdownToggle>
+                                    {this.state.selectedproduct.categoria}    
+                                </DropdownToggle>                                    
                                     <DropdownMenu>
                                     {this.state.categorias.map(val =>
-                                     <DropdownItem onClick={() => this.insertarvalor1(val)}>{val}</DropdownItem>)}                                       
+                                     <DropdownItem
+                                      onClick={() => this.insertarvalor1(val)}>{val}
+                                      <div onClick={this.changeValue}></div>
+                                      </DropdownItem>)}                                       
                                     </DropdownMenu>
                                 </Dropdown>
                             </FormGroup>
@@ -247,7 +254,7 @@ export default class AdmProductos extends Component {
                                 <Label for="Categoria"> Categoria</Label>
                                 <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                                     <DropdownToggle>
-                                        Categorias
+                                    {this.state.newproduct.categoria}    
                                 </DropdownToggle>
                                     <DropdownMenu>
                                     {this.state.categorias.map(val =>
