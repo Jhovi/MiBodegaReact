@@ -230,7 +230,7 @@ export default class AdmProductos extends Component {
 
                     <Modal isOpen={this.state.crearproducto} style={modalStyles}>
                         <ModalHeader>
-                            Producto a editar
+                            Agregar poroducto
                     </ModalHeader>
 
                         <ModalBody>
