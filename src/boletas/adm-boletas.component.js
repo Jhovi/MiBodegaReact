@@ -56,7 +56,7 @@ export default class AdmBoleta extends Component {
         }
       
         return (
-            <div>
+            <div className="adm-card">
                 <button type="button" onClick={this.saveBoletaView} className="btn btn-primary  btn-register-product">Registrar Boleta</button>                                
                 <table className="table">
                     <thead>

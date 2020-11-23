@@ -47,7 +47,7 @@ export default class App extends Component {
         <div className="App">
           <Navigation user={this.state.user} setUser={this.setUser} />
           <div className="auth-wrapper">
-            <div className="auth-inner">
+          
               <Switch>
                 <Route exact path="/" component={() => <Home user={this.state.user} />} />
                 <Route exact path="/login" component={() => <Login setUser={this.setUser} />} />
@@ -62,7 +62,7 @@ export default class App extends Component {
                 <Route exact path="/adm-tableros" component={AdmTableros} />
                
               </Switch>
-            </div>
+           
           </div>
         </div>
       </BrowserRouter >

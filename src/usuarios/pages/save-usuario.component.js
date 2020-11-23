@@ -28,7 +28,7 @@ const finalSpaceCharacters = [
 
 export default class SaveUsuario extends Component {
 
-    
+
     defaultValue = new Date(this.props.location.state.user.fechaNacimiento);
 
     state = {
@@ -115,7 +115,7 @@ export default class SaveUsuario extends Component {
                     fechaNacimiento: this.state.fecha,
                     genero: +this.state.genero
                 }
-                
+
                 Axios.post('Usuario/register', data).then(
                     res => {
                         this.setState({
@@ -173,72 +173,74 @@ export default class SaveUsuario extends Component {
             )
         }
         return (
-            <form onSubmit={this.handleSubmit}>
-                <h3>Registrar Usuario</h3>
+            <div className="container save-card">
+                <form onSubmit={this.handleSubmit}>
+                    <h3>Registrar Usuario</h3>
 
-                <label>Seleccione su genero: </label>
-                <div className="form-check">
-                    <input className="form-check-input" type="radio" name="exampleRadios" defaultChecked={this.props.location.state.user?.genero == 0 ? true : false} id="exampleRadios1" value="0" onChange={this.handleGenero} />
-                    <label className="form-check-label" for="exampleRadios1">
-                        Masculino
+                    <label>Seleccione su genero: </label>
+                    <div className="form-check">
+                        <input className="form-check-input" type="radio" name="exampleRadios" defaultChecked={this.props.location.state.user?.genero == 0 ? true : false} id="exampleRadios1" value="0" onChange={this.handleGenero} />
+                        <label className="form-check-label" for="exampleRadios1">
+                            Masculino
                     </label>
-                </div>
-                <div className="form-check">
-                    <input className="form-check-input" type="radio" name="exampleRadios" defaultChecked={this.props.location.state.user?.genero == 1 ? true : false} id="exampleRadios2" value="1" onChange={this.handleGenero} />
-                    <label className="form-check-label" for="exampleRadios2">
-                        Femenino
+                    </div>
+                    <div className="form-check">
+                        <input className="form-check-input" type="radio" name="exampleRadios" defaultChecked={this.props.location.state.user?.genero == 1 ? true : false} id="exampleRadios2" value="1" onChange={this.handleGenero} />
+                        <label className="form-check-label" for="exampleRadios2">
+                            Femenino
                     </label>
-                </div>
-                <div className="form-check">
-                    <input className="form-check-input" type="radio" name="exampleRadios" defaultChecked={this.props.location.state.user?.genero == 2 ? true : false} id="exampleRadios3" value="2" onChange={this.handleGenero} />
-                    <label className="form-check-label" for="exampleRadios2">
-                        Desconocido
+                    </div>
+                    <div className="form-check">
+                        <input className="form-check-input" type="radio" name="exampleRadios" defaultChecked={this.props.location.state.user?.genero == 2 ? true : false} id="exampleRadios3" value="2" onChange={this.handleGenero} />
+                        <label className="form-check-label" for="exampleRadios2">
+                            Desconocido
                     </label>
-                </div>
+                    </div>
 
-                <br />
+                    <br />
 
-                <div className="form-group">
-                    <label>Nombre</label>
-                    <input type="text" className="form-control" placeholder="Nombre" id="nombre" defaultValue={this.props.location.state.user?.nombre}
-                        onChange={e => this.nombre = e.target.value} />
-                </div>
+                    <div className="form-group">
+                        <label>Nombre</label>
+                        <input type="text" className="form-control" placeholder="Nombre" id="nombre" defaultValue={this.props.location.state.user?.nombre}
+                            onChange={e => this.nombre = e.target.value} />
+                    </div>
 
-                <div className="form-group">
-                    <label>Apellido</label>
-                    <input type="text" className="form-control" placeholder="Apellido" id="apellido" defaultValue={this.props.location.state.user?.apellido}
-                        onChange={e => this.apellido = e.target.value} />
-                </div>
+                    <div className="form-group">
+                        <label>Apellido</label>
+                        <input type="text" className="form-control" placeholder="Apellido" id="apellido" defaultValue={this.props.location.state.user?.apellido}
+                            onChange={e => this.apellido = e.target.value} />
+                    </div>
 
-                <div className="form-group">
-                    <label>Correo</label>
-                    <input type="email" className="form-control" placeholder="Correo" id="correo" defaultValue={this.props.location.state.user?.correo}
-                        onChange={e => this.correo = e.target.value} />
-                </div>
+                    <div className="form-group">
+                        <label>Correo</label>
+                        <input type="email" className="form-control" placeholder="Correo" id="correo" defaultValue={this.props.location.state.user?.correo}
+                            onChange={e => this.correo = e.target.value} />
+                    </div>
 
-                <div className="form-group">
-                    <label>Telefono</label>
-                    <input type="number" className="form-control" placeholder="Telefono" id="telefono" defaultValue={this.props.location.state.user?.telefono}
-                        onChange={e => this.telefono = e.target.value} />
-                </div>
+                    <div className="form-group">
+                        <label>Telefono</label>
+                        <input type="number" className="form-control" placeholder="Telefono" id="telefono" defaultValue={this.props.location.state.user?.telefono}
+                            onChange={e => this.telefono = e.target.value} />
+                    </div>
 
-                <div className="form-group">
-                    <label>DNI</label>
-                    <input type="number" className="form-control" placeholder="Dni" id="dni" defaultValue={this.props.location.state.user?.dni}
-                        onChange={e => this.dni = e.target.value} />
-                </div>
+                    <div className="form-group">
+                        <label>DNI</label>
+                        <input type="number" className="form-control" placeholder="Dni" id="dni" defaultValue={this.props.location.state.user?.dni}
+                            onChange={e => this.dni = e.target.value} />
+                    </div>
 
-                <div className="form-group">
-                    <label>Fecha de Nacimiento</label>
-                    <br></br>
-                    <Datepicker className="form-control" selected={this.state.fecha == '' ? this.defaultValue : this.state.fecha} onChange={this.onChange} dateFormat='dd/MM/yyyy'
-                       id="fechaNacimiento" maxDate={new Date("2002", "01", "01")} showYearDropdown scrollableMonthYearDropdown />
-                </div>
+                    <div className="form-group">
+                        <label>Fecha de Nacimiento</label>
+                        <br></br>
+                        <Datepicker className="form-control" selected={this.state.fecha == '' ? this.defaultValue : this.state.fecha} onChange={this.onChange} dateFormat='dd/MM/yyyy'
+                            id="fechaNacimiento" maxDate={new Date("2002", "01", "01")} showYearDropdown scrollableMonthYearDropdown />
+                    </div>
 
-                {passwordField}
+                    {passwordField}
 
-                <button id="btn-save" className="btn btn-primary btn-block">Registrar</button>
-            </form>
+                    <button id="btn-save" className="btn btn-primary btn-block">Registrar</button>
+                </form>
+            </div>
         )
     }
 }

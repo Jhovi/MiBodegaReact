@@ -1,10 +1,13 @@
 
 import Axios from "axios";
 import { Component } from "react";
-import { Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Notifications, { notify } from '../components/Notification';
+import logo from '../logo.png';
+
 
 export default class Login extends Component {
+
 
     state = {
         loggedIn: false,
@@ -66,12 +69,15 @@ export default class Login extends Component {
         }
 
         return (
-            <div>
+            <div className="login-card">
 
                 <Notifications />
 
                 <form onSubmit={this.handleSubmit}>
-                    <h3>Login</h3>
+                    
+                    <div className="img-container">
+                        <img src={logo} className="img-logo" width="200" height="200" />
+                    </div>
 
                     <div className="form-group">
                         <label>Correo</label>
@@ -86,9 +92,19 @@ export default class Login extends Component {
                     </div>
 
                     <button type="submit" id="btn-ingresar" className="btn btn-primary btn-block">Acceder</button>
-                    <button type="button" id="btn-register" onClick={this.saveUsuarioView} className="btn btn-primary btn-lg">Registrarse</button>
-                    <button type="button" className="btn btn-primary btn-lg">Invitado</button>
-
+                    <div className="col-md-12 ">
+                        <div className="login-or">
+                            <hr className="hr-or" />
+                            <span className="span-or">or</span>
+                        </div>
+                    </div>
+                    <button type="button" className="btn btn-primary btn-block ">Invitado</button>
+                    <div class="form-group">
+                        <p class="text-center">Don't have account? <Link to={{
+                            pathname: '/register/0',
+                            state: { user: this.state.emptyUser }
+                        }}>Sign up here</Link> </p>
+                    </div>
                 </form>
             </div>
         )

@@ -235,7 +235,7 @@ export default class EditBoleta extends Component {
         }
 
         return (
-            <>
+            <div className="save-card">
                 <form onSubmit={this.handleSubmit}>
                     <h3>Editar Boleta</h3>
 
@@ -375,7 +375,7 @@ export default class EditBoleta extends Component {
 
                     <button className="btn btn-primary btn-block" >Registrar</button>
                 </form>
-            </>
+            </div>
         )
     }
 }

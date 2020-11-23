@@ -145,8 +145,8 @@ class Chart extends Component {
     render() {
         return (
 
-            <div className="chart">
-                <Pie
+            <div className="adm-card" >
+                <Pie height="100px"
                     data={this.state.pieChartData}
                     options={{
                         title: {
@@ -162,7 +162,7 @@ class Chart extends Component {
                 />
                 <br></br>
 
-                <Bar
+                <Bar height="100px"
                     data={this.state.barChartData}
                     options={{
                         scales: {

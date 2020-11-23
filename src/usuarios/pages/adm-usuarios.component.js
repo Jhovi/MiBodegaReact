@@ -230,7 +230,7 @@ export default class AdmUsuarios extends Component {
         }
 
         return (
-            <div>
+            <div className="adm-card">
                 <button type="button" onClick={this.saveUsuarioView} className="btn btn-primary  btn-register-user">Registrar Usuario</button>
                 <NavDropdown title="Export" id="btn-export" className="btn btn-export-file">
                     <NavDropdown.Item id="btn-export-pdf" onClick={this.downloadPDF}>Export PDF</NavDropdown.Item>

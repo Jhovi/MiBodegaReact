@@ -127,15 +127,15 @@ export default class AdmProductos extends Component {
         }    
 
         const modalStyles = {
-
             position: "absolute",
+            width: '400px',
             top: '50%',
             left: '50%',
             transform: 'translate(-50%,-50%)'
         }
 
         return (
-            <div>
+            <div className="adm-card">
                 <button type="button" onClick={this.saveProductoView} className="btn btn-primary  btn-register-product">Registrar Producto</button>
                 <table className="table">
                     <thead>

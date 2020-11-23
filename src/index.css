@@ -65,6 +65,21 @@ html,
   transition: all 0.3s;
 }
 
+@media only screen and (max-width: 800px) {
+ .auth-inner {
+   width: 50%;
+ }
+ 
+ .btn-lg {
+  text-align: center;
+  margin: 0;
+ }
+
+
+
+ 
+}
+
 .auth-wrapper .form-control:focus {
   border-color: #167bff;
   box-shadow: none;
