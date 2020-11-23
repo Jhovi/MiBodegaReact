@@ -115,3 +115,8 @@ tr:nth-child(odd):hover {
   border-radius: 15px;
   transition: all 0.3s;
 } /* save-card */
+
+/* adm-boleta */
+.btn-register-product {
+  margin-bottom: 1.5rem;
+}
