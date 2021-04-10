@@ -5,26 +5,28 @@ import Datepicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Redirect } from "react-router-dom";
 import '../../App.css';
+import Task from '../../components/Task'
 import Notifications, { notify } from '../../components/Notification';
+import { DragDropContext } from "react-beautiful-dnd";
 
-const finalSpaceCharacters = [
-    {
-        id: 'a',
-        value: 0,
-        thumb: '/images/avatar_femenino.png'
-    },
-    {
-        id: 'b',
-        value: 1,
-        thumb: '/images/avatar_hombre.jpg'
-    },
-    {
-        id: 'c',
-        value: 2,
-        thumb: '/images/avatar_desconocido.jpg'
+let toDo = [{
+    'id': '1',
+    'title': 'Grocery',
+    'list': ['/images/avatar_desconocido.jpg', '/images/avatar_hombre.jpg', '/images/avatar_femenino.png']
+}]
+
+let onDragEnd = (result) => {
+    if (!result.destination) {
+        return;
     }
-]
-
+    let sourceIdx = parseInt(result.source.index)
+    let destIdx = parseInt(result.destination.index)
+    let draggedLink = toDo[0].list[sourceIdx]
+    let newList = toDo[0].list.slice();
+    newList.splice(sourceIdx, 1);
+    newList.splice(destIdx, 0, draggedLink)
+    toDo[0].list = newList;
+}
 
 export default class SaveUsuario extends Component {
 
@@ -178,6 +180,10 @@ export default class SaveUsuario extends Component {
                     <h3>Registrar Usuario</h3>
 
                     <label>Seleccione su genero: </label>
+
+                    <DragDropContext onDragEnd={onDragEnd}>
+                        <Task toDo={toDo[0]} />
+                    </DragDropContext>
                     <div className="form-check">
                         <input className="form-check-input" type="radio" name="exampleRadios" defaultChecked={this.props.location.state.user?.genero == 0 ? true : false} id="exampleRadios1" value="0" onChange={this.handleGenero} />
                         <label className="form-check-label" for="exampleRadios1">
