@@ -20,10 +20,10 @@ export default class Navigation extends Component {
                             <Link to={'/adm-usuarios'} className="nav-link">Usuarios</Link>
                         </li>
 
-                        <li className="nav-item">
+                        <li className="nav-item" id= "adm-boletas">
                             <Link to={'/adm-boletas'} className="nav-link">Boleta</Link>
                         </li>
-                        <li className="nav-item">
+                        <li className="nav-item" id= "adm-productos">
                             <Link to={'/adm-productos'} className="nav-link">Productos</Link>
                         </li>
                         <li className="nav-item">

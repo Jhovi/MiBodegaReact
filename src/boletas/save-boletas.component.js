@@ -53,6 +53,44 @@ export default class SaveBoleta extends Component {
     }
 
     setproducts = products => {
+
+        console.log("productos")
+        console.log(products);
+
+        for(var i = 0; i<products.length; i++){
+           
+            switch(products[i].categoriaId) {
+                case 1:
+                    products[i].categoriaId = "Whisky";
+                  break;
+                case 2:
+                    products[i].categoriaId = "Ron";
+                  break;
+                case 3:
+                    products[i].categoriaId = "Cerveza";
+                  break;
+                case 4:
+                    products[i].categoriaId = "Vino";
+                  break;
+                case 5:
+                    products[i].categoriaId = "Vodka";
+                  break;
+                case 6:
+                    products[i].categoriaId = "Tequila";
+                  break;
+                case 7:
+                    products[i].categoriaId = "Piqueos";
+                  break;
+                case 8:
+                    products.categoriaId = "Otros";
+                  break; 
+                default:
+                    // code block          
+              }
+        }
+        console.log("productos actualizados")
+        console.log(products);
+
         this.setState({
             products: products
         })
@@ -65,12 +103,12 @@ export default class SaveBoleta extends Component {
         let data = {}
 
         data = {
-
             UsuarioId: this.state.selectedusuario.id,
             Fecha: this.state.fecha,
             Direccion: this.direccion,
             DetalleBoleta: this.state.detalleproducto
         }
+        console.log("información a ser enviada")
         console.log(data)
 
         Axios.post('Boleta', data).then(
@@ -89,6 +127,7 @@ export default class SaveBoleta extends Component {
     }
 
     abrirModalP = () => {
+        
         this.setState({ abiertoP: !this.state.abiertoP })
     }
 
@@ -157,7 +196,7 @@ export default class SaveBoleta extends Component {
 
                     <div className="form-group">
                         <label>seleccionar usuario</label>
-                        <input type="text" className="form-control" placeholder="Nombre" value={(this.state.selectedusuario == undefined) ? "" : this.state.selectedusuario.nombre + " " + this.state.selectedusuario.apellido}
+                        <input type="text" id= "nombre" className="form-control" placeholder="Nombre" value={(this.state.selectedusuario == undefined) ? "" : this.state.selectedusuario.nombre + " " + this.state.selectedusuario.apellido}
                             onClick={this.abrirModalU} />
                     </div>
 
@@ -210,17 +249,17 @@ export default class SaveBoleta extends Component {
 
                     <div className="form-group">
                         <label>Direccion</label>
-                        <input type="text" className="form-control" placeholder="Direccion"
+                        <input type="text" id= "direccion" className="form-control" placeholder="Direccion"
                             onChange={e => this.direccion = e.target.value} />
                     </div>
 
                     <form>
-                        <h3>Detalles de los producto</h3>
-                        <button type="button" onClick={this.abrirModalP} className="btn btn-primary  btn-register-user">Agregar nuevo producto</button>
+                        <h3>Detalles de los productos</h3>
+                        <button type="button" id= "add-product" onClick={this.abrirModalP} className="btn btn-primary  btn-register-user">Agregar nuevo producto</button>
 
                         <Modal isOpen={this.state.abiertoP} style={modalStyles}>
                             <ModalHeader>
-                                Seleccionar Fecha
+                                Seleccionar producto
             </ModalHeader>
 
                             <ModalBody>
@@ -242,7 +281,7 @@ export default class SaveBoleta extends Component {
                                                     <td>{product.id}</td>
                                                     <td>{product.nombre}</td>
                                                     <td>{product.precio}</td>
-                                                    <td>{product.categoria}</td>
+                                                    <td>{product.categoriaId}</td>
 
                                                 </tr>
                                             )
@@ -281,14 +320,9 @@ export default class SaveBoleta extends Component {
                                 })}
                             </tbody>
                         </table>
-                    </form>
+                    </form>                   
 
-                    <div className="form-group">
-                        <label>total</label>
-                        <input type="number" className="form-control" placeholder="Precio" disabled="true" />
-                    </div>
-
-                    <button className="btn btn-primary btn-block" >Registrar</button>
+                    <button id= "btn-registrar" className="btn btn-primary btn-block" >Registrar</button>
                 </form>
             </div>
         )

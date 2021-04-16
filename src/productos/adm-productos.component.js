@@ -15,8 +15,8 @@ export default class AdmProductos extends Component {
 
     state = {
         valor1: '',
-        selectedproduct: { nombre: "", descripcion: "", precio: "", categoria: "", estado: "", stock: "" },
-        newproduct:{ nombre: "", descripcion: "", precio: "", categoria: "Escoger", estado: "valido", stock: "" },
+        selectedproduct: { nombre: "", descripcion: "", precio: "", categoriaId: "Escoger", estado: "", stock: "" },
+        newproduct:{ nombre: "", descripcion: "", precio: "", categoriaId: "Escoger", estado: "valido", stock: "" },
         categorias: ["Whisky", "Ron", "Cerveza", "Vino", "Vodka", "Tequila", "Piqueos", "Otros"],
         dropDownValue: ""
     }
@@ -48,28 +48,65 @@ export default class AdmProductos extends Component {
     }
 
     editProductoView(product) {
-
+       
+        var test = product;
+        
+        switch(test.categoriaId) {
+            case 1:
+                test.categoriaId = "Whisky";
+              break;
+            case 2:
+                test.categoriaId = "Ron";
+              break;
+            case 3:
+                test.categoriaId = "Cerveza";
+              break;
+            case 4:
+                test.categoriaId = "Vino";
+              break;
+            case 5:
+                test.categoriaId = "Vodka";
+              break;
+            case 6:
+                test.categoriaId = "Tequila";
+              break;
+            case 7:
+                test.categoriaId = "Piqueos";
+              break;
+            case 8:
+                test.categoriaId = "Otros";
+              break; 
+            default:
+                // code block          
+          }
+            
         this.setState({
-            abiertoP: !this.state.abiertoP,          
+            abiertoP: !this.state.abiertoP,  
+            product: test,        
             selectedproduct: product
         })
     }
 
-    insertarvalor1(val) {       
+    insertarvalor1(val) {
+       
         var temp = this.state.selectedproduct
-        temp.categoria = val
+        temp.categoriaId = val
+
         this.setState({
             selectedproduct: temp,
             dropdownOpen: !this.state.dropdownOpen
-        })       
+        })
+        
     }    
     insertarcategoria(val) {
-        var temp = this.state.newproduct
-        temp.categoria = val
+        var temp = this.state.newproduct      
+
+        temp.categoriaId = val
         this.setState({
             newproduct: temp,
             dropdownOpen: !this.state.dropdownOpen
-        })       
+        })
+                   
     }  
 
     toggle = () => {
@@ -92,6 +129,42 @@ export default class AdmProductos extends Component {
     }
 
     ActualizarProducto = () => {
+       
+        var test = this.state.selectedproduct;
+
+        switch(test.categoriaId) {
+            case "Whisky":
+                test.categoriaId = 1;
+              break;
+            case "Ron":
+                test.categoriaId = 2;
+              break;
+            case "Cerveza":
+                test.categoriaId = 3;
+              break;
+            case "Vino":
+                test.categoriaId = 4;
+              break;
+            case "Vodka":
+                test.categoriaId = 5;
+              break;
+            case "Tequila":
+                test.categoriaId = 6;
+              break;
+            case "Piqueos":
+                test.categoriaId = 7;
+              break;
+            case "Otros":
+                test.categoriaId = 8;
+              break; 
+            default:
+                // code block          
+          }
+
+          this.setState({
+            selectedproduct: test
+        })
+
         Axios.put('Producto', this.state.selectedproduct).then(
             res => {
                 this.setState({ abiertoP: !this.state.abiertoP })
@@ -103,7 +176,43 @@ export default class AdmProductos extends Component {
         )   
     }
     
-    CrearProducto = () => {       
+    CrearProducto = () => {        
+        
+        var test = this.state.newproduct;
+      
+        switch(test.categoriaId) {
+            case "Whisky":
+                test.categoriaId = 1;
+              break;
+            case "Ron":
+                test.categoriaId = 2;
+              break;
+            case "Cerveza":
+                test.categoriaId = 3;
+              break;
+            case "Vino":
+                test.categoriaId = 4;
+              break;
+            case "Vodka":
+                test.categoriaId = 5;
+              break;
+            case "Tequila":
+                test.categoriaId = 6;
+              break;
+            case "Piqueos":
+                test.categoriaId = 7;
+              break;
+            case "Otros":
+                test.categoriaId = 8;
+              break; 
+            default:
+                // code block          
+          }
+
+          this.setState({
+            newproduct: test
+        })
+      
         Axios.post('Producto', this.state.newproduct).then(
             res => {
                 this.setState({  crearproducto: !this.state.crearproducto })
@@ -121,7 +230,7 @@ export default class AdmProductos extends Component {
 
 
     render() {
-        console.log(this.state.valor1)
+       
         if (this.state.redirectToSaveProducto) {
             return <Redirect to={'/adm-productos/registrar'} />;
         }    
@@ -136,15 +245,14 @@ export default class AdmProductos extends Component {
 
         return (
             <div className="adm-card">
-                <button type="button" onClick={this.saveProductoView} className="btn btn-primary  btn-register-product">Registrar Producto</button>
+                <button type="button" onClick={this.saveProductoView} id= "add-products" className="btn btn-primary  btn-register-product">Registrar Producto</button>
                 <table className="table">
                     <thead>
                         <tr>
                             <th scope="col">Codigo del producto</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Descripción</th>
-                            <th scope="col">Precio</th>
-                            <th scope="col">Categoría</th>
+                            <th scope="col">Precio</th>                            
                             <th scope="col">Estado</th>
                             <th scope="col">Stock</th>
                             <th scope="col">Opciones</th>
@@ -159,12 +267,11 @@ export default class AdmProductos extends Component {
                                     <td>{product.id}</td>
                                     <td>{product.nombre}</td>
                                     <td>{product.descripcion}</td>
-                                    <td>{product.precio}</td>
-                                    <td>{product.categoria}</td>
+                                    <td>{product.precio}</td>                                    
                                     <td>{product.estado}</td>
                                     <td>{product.stock}</td>
                                     <td>
-                                        <button type="button" onClick={() => this.editProductoView(product)} className="btn btn-primary btn-sm " >Editar</button>
+                                        <button type="button" id= "btn-editar" onClick={() => this.editProductoView(product)} className="btn btn-primary btn-sm " >Editar</button>
                                     </td>
                                 </tr>
                             )
@@ -180,49 +287,48 @@ export default class AdmProductos extends Component {
 
                             <FormGroup>
                                 <Label for="Nombre"> Nombre</Label>
-                                <Input input type="text" className="form-control" defaultValue={this.state.selectedproduct.nombre}
+                                <Input input type="text" id ="nombre" className="form-control" defaultValue={this.state.selectedproduct.nombre}
                                  onChange={e => this.state.selectedproduct.nombre = e.target.value}> </Input>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="Descripcion"> Descripcion</Label>
-                                <Input type="text" className="form-control" defaultValue={this.state.selectedproduct.descripcion}
+                                <Input type="text" id= "descripcion" className="form-control" defaultValue={this.state.selectedproduct.descripcion}
                                     onChange={e => this.state.selectedproduct.descripcion = e.target.value} > </Input>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="Precio"> Precio</Label>
-                                <Input type="number" className="form-control" defaultValue={this.state.selectedproduct.precio}
+                                <Input type="number" id= "precio" className="form-control" defaultValue={this.state.selectedproduct.precio}
                                     onChange={e => this.state.selectedproduct.precio = e.target.value}> </Input>
                             </FormGroup>
                             <FormGroup>                            
                                 <Label for="Categoria"> Categoria</Label>
                                 <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                                    <DropdownToggle>
-                                    {this.state.selectedproduct.categoria}    
-                                </DropdownToggle>                                    
+                                        <DropdownToggle id= "categoria-edit">
+                                        {this.state.selectedproduct.categoriaId}    
+                                        </DropdownToggle>                                    
                                     <DropdownMenu>
-                                    {this.state.categorias.map(val =>
-                                     <DropdownItem
-                                      onClick={() => this.insertarvalor1(val)}>{val}
-                                      <div onClick={this.changeValue}></div>
+                                        {this.state.categorias.map(val =>
+                                     <DropdownItem                                      
+                                      onClick={() => this.insertarvalor1(val)}>{val}                                     
                                       </DropdownItem>)}                                       
                                     </DropdownMenu>
                                 </Dropdown>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="Estado"> Estado</Label>
-                                <Input type="text" className="form-control" defaultValue={this.state.selectedproduct.estado}
+                                <Input type="text" id= "estado" className="form-control" defaultValue={this.state.selectedproduct.estado}
                                     onChange={e => this.state.selectedproduct.estado = e.target.value}> </Input>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="Stock"> Stock</Label>
-                                <Input type="text" className="form-control" defaultValue={this.state.selectedproduct.stock}
+                                <Input type="text" id= "stock" className="form-control" defaultValue={this.state.selectedproduct.stock}
                                     onChange={e => this.state.selectedproduct.stock = e.target.value}> </Input>
                             </FormGroup>
 
                         </ModalBody>
 
                         <ModalFooter>
-                            <Button color="primary" onClick={this.ActualizarProducto}>Actualizar</Button>
+                            <Button color="primary" id= "btn-actualizar" onClick={this.ActualizarProducto}>Actualizar</Button>
                             <Button color="secondary" onClick={this.CerrarModalP}>Cerrar</Button>
                         </ModalFooter>
 
@@ -237,41 +343,43 @@ export default class AdmProductos extends Component {
 
                             <FormGroup>
                                 <Label for="Nombre"> Nombre</Label>
-                                <Input input type="text" className="form-control" placeholder = "Nombre"
+                                <Input input type="text" id= "nombre" className="form-control" placeholder = "Nombre"
                                  onChange={e => this.state.newproduct.nombre = e.target.value}> </Input>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="Descripcion"> Descripcion</Label>
-                                <Input type="text" className="form-control" placeholder = "Descripción"
+                                <Input type="text" id= "descripcion" className="form-control" placeholder = "Descripción"
                                     onChange={e => this.state.newproduct.descripcion = e.target.value} > </Input>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="Precio"> Precio</Label>
-                                <Input type="number" className="form-control" placeholder = "Precio"
+                                <Input type="number" id= "precio" className="form-control" placeholder = "Precio"
                                     onChange={e => this.state.newproduct.precio = e.target.value}> </Input>
                             </FormGroup>
                             <FormGroup>                            
                                 <Label for="Categoria"> Categoria</Label>
                                 <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                                    <DropdownToggle>
-                                    {this.state.newproduct.categoria}    
-                                </DropdownToggle>
+                                        <DropdownToggle id= "categoria">
+                                        {this.state.newproduct.categoriaId}    
+                                        </DropdownToggle>
                                     <DropdownMenu>
                                     {this.state.categorias.map(val =>
-                                     <DropdownItem onClick={() => this.insertarcategoria(val)}>{val}</DropdownItem>)}                                       
+                                     <DropdownItem
+                                        onClick={() => this.insertarcategoria(val)}>{val}
+                                     </DropdownItem>)}                                       
                                     </DropdownMenu>
                                 </Dropdown>
                             </FormGroup>                            
                             <FormGroup>
                                 <Label for="Stock"> Stock</Label>
-                                <Input type="text" className="form-control" placeholder = "Stock"
+                                <Input type="text" id= "stock" className="form-control" placeholder = "Stock"
                                     onChange={e => this.state.newproduct.stock = e.target.value}> </Input>
                             </FormGroup>
 
                         </ModalBody>
 
                         <ModalFooter>
-                            <Button color="primary" onClick={this.CrearProducto}>Actualizar</Button>
+                            <Button id = "btn-crear" color="primary" onClick={this.CrearProducto}>Crear</Button>
                             <Button color="secondary" onClick={this.CerrarCrearProducto}>Cerrar</Button>
                         </ModalFooter>
 
