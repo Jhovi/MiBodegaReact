@@ -93,7 +93,7 @@ export default class AdmBoleta extends Component {
                                     <td>{bill.direccion}</td>
                                     <td>{bill.total}</td>                                                                     
                                     <td>
-                                        <button type="button" onClick={()=>this.editBoletaView(bill)} className="btn btn-primary btn-sm " >Editar</button>                                                                         
+                                        <button type="button" id= "edit-boletas" onClick={()=>this.editBoletaView(bill)} className="btn btn-primary btn-sm " >Editar</button>                                                                         
                                     </td>
                                 </tr>
                             )

@@ -274,7 +274,7 @@ export default class EditBoleta extends Component {
 
             <div className="form-group">
                 <label>seleccionar usuario</label>
-                <input type="text" className="form-control" placeholder="Nombre" value={(this.state.selectedusuario == undefined) ? this.state.nombre : this.state.selectedusuario.nombre + " " + this.state.selectedusuario.apellido}
+                <input type="text" id= "nombre" className="form-control" placeholder="Nombre" value={(this.state.selectedusuario == undefined) ? this.state.nombre : this.state.selectedusuario.nombre + " " + this.state.selectedusuario.apellido}
                     onClick={this.abrirModalU} />
             </div>
 
@@ -323,12 +323,12 @@ export default class EditBoleta extends Component {
                 <label>Fecha</label>
                 <br></br>
                 <Datepicker className="form-control" onChange={this.onChange} dateFormat='dd/MM/yyyy' selected={this.state.fecha}
-                            maxDate={new Date("2021", "01", "01")} showYearDropdown scrollableMonthYearDropdown />
+                            maxDate={new Date("2021", "04", "17")} showYearDropdown scrollableMonthYearDropdown />
             </div>
 
             <div className="form-group">
                 <label>Direccion</label>
-                <input type="text" className="form-control" placeholder="Direccion" defaultValue={this.props.location.state.boleta.direccion}
+                <input type="text" id ="direccion" className="form-control" placeholder="Direccion" defaultValue={this.props.location.state.boleta.direccion}
                     onChange={e => this.state.direccion = e.target.value} />
             </div>
 
@@ -407,7 +407,7 @@ export default class EditBoleta extends Component {
                 </table>
             </form>                   
 
-            <button className="btn btn-primary btn-block" >Registrar</button>
+            <button id= "btn-editar"className="btn btn-primary btn-block" >Editar</button>
         </form>
     </div>
         )
