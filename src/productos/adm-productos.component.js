@@ -85,6 +85,9 @@ export default class AdmProductos extends Component {
             product: test,        
             selectedproduct: product
         })
+        console.log("estos son los productos xd");
+        console.log(this.state.products);
+        console.log("estos son los productos xd");
     }
 
     insertarvalor1(val) {

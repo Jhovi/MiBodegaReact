@@ -21,6 +21,15 @@ export default class AdmBoleta extends Component {
                 console.log(err);
             }
         )
+
+        Axios.get('Producto').then(
+            res => {
+                this.setProducts(res.data)
+            },
+            err => {
+                console.log(err);
+            }
+        )
     }
 
     setBoletas = bills => {
@@ -29,18 +38,23 @@ export default class AdmBoleta extends Component {
         })
     }
 
+    setProducts = products => {
+        this.setState({
+            productos: products
+        })
+    }
+
     saveBoletaView = () => {
         this.setState({
             redirectToSaveBoleta: true
-        })
-
+        })        
     }
 
     editBoletaView(bill) {       
         this.setState({
             redirectToEditboleta: true,
             selectedbill: bill
-        })
+        })        
     }       
 
     render() {
@@ -52,7 +66,7 @@ export default class AdmBoleta extends Component {
         if (this.state.redirectToEditboleta) {
             return <Redirect to={{
                 pathname: "/adm-boletas/editar",
-                state: {boleta: this.state.selectedbill}}} />;
+                state: {boleta: this.state.selectedbill, productos: this.state.productos}}} />;
         }
       
         return (
