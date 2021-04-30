@@ -58,14 +58,18 @@ class Chart extends Component {
 
     onChangeDateDesde = (fecha) => {
 
-        var fechaToServiceDesde = fecha.toLocaleDateString('en-US')
+        var d = new Date(fecha);
+        var curr_date = d.getDate();
+        var curr_month = d.getMonth() + 1;
+        var curr_year = d.getFullYear();
+        var fechaDesdeParsed = curr_date + "/" + curr_month + "/" + curr_year;
 
         this.setState({
             fechaDesde: fecha,
-            fechaToServiceDesde: fechaToServiceDesde
+            fechaToServiceDesde: fechaDesdeParsed
         })
 
-        Axios.get('Boleta/FetchTop5Products?inicio=' + fechaToServiceDesde + "&fin=" + this.state.fechaToServiceHasta).then(
+        Axios.get('Boleta/FetchTop5Products?inicio=' + fechaDesdeParsed + "&fin=" + this.state.fechaToServiceHasta).then(
             res => {
                 console.log(res.data)
                 var labelsToChart = [];
@@ -105,12 +109,18 @@ class Chart extends Component {
 
         var fechaToServiceHasta = fecha.toLocaleDateString('en-US')
 
+        var d = new Date(fecha);
+        var curr_date = d.getDate();
+        var curr_month = d.getMonth() + 1;
+        var curr_year = d.getFullYear();
+        var fechaHastaParsed = curr_date + "/" + curr_month + "/" + curr_year;
+
         this.setState({
             fechaHasta: fecha,
-            fechaToServiceHasta: fechaToServiceHasta
+            fechaToServiceHasta: fechaHastaParsed
         })
 
-        Axios.get('Boleta/FetchTop5Products?inicio=' + this.state.fechaToServiceDesde + "&fin=" + fechaToServiceHasta).then(
+        Axios.get('Boleta/FetchTop5Products?inicio=' + this.state.fechaToServiceDesde + "&fin=" + fechaHastaParsed).then(
             res => {
                 var labelsToChart = [];
                 var totalToChart = [];

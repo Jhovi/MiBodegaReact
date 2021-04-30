@@ -181,9 +181,7 @@ export default class SaveUsuario extends Component {
 
                     <label>Seleccione su genero: </label>
 
-                    <DragDropContext onDragEnd={onDragEnd}>
-                        <Task toDo={toDo[0]} />
-                    </DragDropContext>
+                   
                     <div className="form-check">
                         <input className="form-check-input" type="radio" name="exampleRadios" defaultChecked={this.props.location.state.user?.genero == 0 ? true : false} id="exampleRadios1" value="0" onChange={this.handleGenero} />
                         <label className="form-check-label" for="exampleRadios1">
@@ -207,38 +205,38 @@ export default class SaveUsuario extends Component {
 
                     <div className="form-group">
                         <label>Nombre</label>
-                        <input type="text" className="form-control" placeholder="Nombre" id="nombre" defaultValue={this.props.location.state.user?.nombre}
-                            onChange={e => this.nombre = e.target.value} />
+                        <input type="text" className="form-control" placeholder="Nombre" id="nombre" defaultValue={this.props.location.state.user?.nombre} 
+                            onChange={e => this.nombre = e.target.value} required/>
                     </div>
 
                     <div className="form-group">
                         <label>Apellido</label>
                         <input type="text" className="form-control" placeholder="Apellido" id="apellido" defaultValue={this.props.location.state.user?.apellido}
-                            onChange={e => this.apellido = e.target.value} />
+                            onChange={e => this.apellido = e.target.value} required/>
                     </div>
 
                     <div className="form-group">
                         <label>Correo</label>
                         <input type="email" className="form-control" placeholder="Correo" id="correo" defaultValue={this.props.location.state.user?.correo}
-                            onChange={e => this.correo = e.target.value} />
+                            onChange={e => this.correo = e.target.value} required/>
                     </div>
 
                     <div className="form-group">
                         <label>Telefono</label>
                         <input type="number" className="form-control" placeholder="Telefono" id="telefono" defaultValue={this.props.location.state.user?.telefono}
-                            onChange={e => this.telefono = e.target.value} />
+                            onChange={e => this.telefono = e.target.value} required/>
                     </div>
 
                     <div className="form-group">
                         <label>DNI</label>
                         <input type="number" className="form-control" placeholder="Dni" id="dni" defaultValue={this.props.location.state.user?.dni}
-                            onChange={e => this.dni = e.target.value} />
+                            onChange={e => this.dni = e.target.value} required/>
                     </div>
 
                     <div className="form-group">
                         <label>Fecha de Nacimiento</label>
                         <br></br>
-                        <Datepicker className="form-control" selected={this.state.fecha == '' ? this.defaultValue : this.state.fecha} onChange={this.onChange} dateFormat='dd/MM/yyyy'
+                        <Datepicker required className="form-control" selected={this.state.fecha == '' ? this.defaultValue : this.state.fecha} onChange={this.onChange} dateFormat='dd/MM/yyyy'
                             id="fechaNacimiento" maxDate={new Date("2002", "01", "01")} showYearDropdown scrollableMonthYearDropdown />
                     </div>
 

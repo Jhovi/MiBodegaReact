@@ -99,8 +99,8 @@ export default class Login extends Component {
                         </div>
                     </div>
                     <button type="button" className="btn btn-primary btn-block ">Invitado</button>
-                    <div class="form-group">
-                        <p class="text-center">Don't have account? <Link to={{
+                    <div class="form-group" >
+                        <p class="text-center">Don't have account? <Link id="btn-register" to={{
                             pathname: '/register/0',
                             state: { user: this.state.emptyUser }
                         }}>Sign up here</Link> </p>
