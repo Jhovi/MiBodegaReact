@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Axios from 'axios';
 
-Axios.defaults.baseURL='http://localhost:5000/api/'
+Axios.defaults.baseURL='https://mibodegaapi.azurewebsites.net/api/'
 
 Axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token')
 
